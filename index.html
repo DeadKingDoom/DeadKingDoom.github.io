@@ -5,26 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <link rel="stylesheet" href="styles.css">
   <title>Grow a Garden Calculator</title>
-  <style>
-    .central-container {
-      background: #fff;
-      padding: 2rem;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      width: 100%;
-      max-width: 500px;
-      display: flex;
-      flex-direction: column;
-      align-items: stretch;
-      margin-top: 2rem;
-    }
-  </style>
 </head>
 <body>
   <h1>🌱 Grow a Garden Calculator</h1>
   <div class="central-container">
-    <label for="category-select">Select Category</label>
-    <select id="category-select">
+    <label for="category">Category</label>
+    <select id="category" onchange="updatePlantOptions()">
       <option value="public">Public Crops</option>
       <option value="normal">Normal Seed Pack</option>
       <option value="premium">Premium Seed Pack</option>
@@ -33,61 +19,178 @@
       <option value="lunar">Lunar Glow Event</option>
     </select>
 
-    <label for="plant-select">Select Plant</label>
-    <select id="plant-select"></select>
+    <label for="plant">Plant</label>
+    <select id="plant"></select>
 
     <label for="mass">Mass (kg)</label>
     <input type="number" id="mass" step="0.01" placeholder="e.g. 24.02">
 
-    <label for="multiplier">Mutation Multiplier</label>
-    <input type="number" id="multiplier" value="2200">
+    <div class="mutations-wrapper">
+      <label for="mutation-search">Mutations</label>
+      <div id="mutation-container">
+        <div id="selected-mutations" class="chips"></div>
+        <input type="text" id="mutation-search" placeholder="Type to add a mutation..." autocomplete="off" />
+        <div id="mutation-suggestions" class="suggestions"></div>
+      </div>
+    </div>
+
+    <label for="variant">Variant</label>
+    <select id="variant" class="variant-select">
+      <option value="1">Normal</option>
+      <option value="20">Gold</option>
+      <option value="50">Rainbow</option>
+    </select>
 
     <button class="calc" onclick="calculateUnified()">Calculate</button>
     <div class="result" id="result"></div>
   </div>
 
   <script>
-    const plants = {
-      public: ["Carrot", "Strawberry", "Blueberry", "Orange Tulip", "Tomato", "Corn", "Daffodil", "Watermelon", "Pumpkin", "Apple", "Bamboo", "Coconut", "Cactus", "Dragon Fruit", "Mango", "Grape", "Mushroom", "Pepper", "Cacao"],
-      normal: ["Lemon", "Pineapple", "Peach", "Raspberry", "Pear"],
-      premium: ["Raspberry", "Cranberry", "Durian", "Eggplant", "Venus Flytrap", "Lotus"],
-      exotic: ["Papaya", "Banana", "Passionfruit", "Soul Fruit", "Cursed Fruit"],
-      easter: ["Chocolate Carrot", "Candy Sunflower", "Easter Egg", "Red Lollipop", "Candy Blossom"],
-      lunar: ["Nightshade", "Glowshroom", "Mint", "Moonflower", "Starfruit", "Moonglow", "Moon Blossom"]
+    const mutations = {
+      wet: 1,
+      chilled: 1,
+      frozen: 9,
+      moonlit: 1,
+      shocked: 99
     };
 
-    const categorySelect = document.getElementById("category-select");
-    const plantSelect = document.getElementById("plant-select");
+    const plantOptions = {
+      public: [
+        { name: "Carrot", value: 10 },
+        { name: "Strawberry", value: 12 },
+        { name: "Blueberry", value: 15 },
+        { name: "Orange Tulip", value: 18 },
+        { name: "Tomato", value: 14 },
+        { name: "Corn", value: 16 },
+        { name: "Daffodil", value: 20 },
+        { name: "Watermelon", value: 25 },
+        { name: "Pumpkin", value: 22 },
+        { name: "Apple", value: 17 },
+        { name: "Bamboo", value: 19 },
+        { name: "Coconut", value: 23 },
+        { name: "Cactus", value: 21 },
+        { name: "Dragon Fruit", value: 30 },
+        { name: "Mango", value: 26 },
+        { name: "Grape", value: 15 },
+        { name: "Mushroom", value: 241.5669481 },
+        { name: "Pepper", value: 11 },
+        { name: "Cacao", value: 24 }
+      ],
+      normal: [
+        { name: "Lemon", value: 14 },
+        { name: "Pineapple", value: 20 },
+        { name: "Peach", value: 18 },
+        { name: "Raspberry", value: 22 },
+        { name: "Pear", value: 19 }
+      ],
+      premium: [
+        { name: "Raspberry", value: 22 },
+        { name: "Cranberry", value: 24 },
+        { name: "Durian", value: 30 },
+        { name: "Eggplant", value: 26 },
+        { name: "Venus Flytrap", value: 32 },
+        { name: "Lotus", value: 28 }
+      ],
+      exotic: [
+        { name: "Papaya", value: 25 },
+        { name: "Banana", value: 20 },
+        { name: "Passionfruit", value: 27 },
+        { name: "Soul Fruit", value: 35 },
+        { name: "Cursed Fruit", value: 40 }
+      ],
+      easter: [
+        { name: "Chocolate Carrot", value: 30 },
+        { name: "Candy Sunflower", value: 28 },
+        { name: "Easter Egg", value: 35 },
+        { name: "Red Lollipop", value: 26 },
+        { name: "Candy Blossom", value: 32 }
+      ],
+      lunar: [
+        { name: "Nightshade", value: 38 },
+        { name: "Glowshroom", value: 36 },
+        { name: "Mint", value: 30 },
+        { name: "Moonflower", value: 34 },
+        { name: "Starfruit", value: 40 },
+        { name: "Moonglow", value: 42 },
+        { name: "Moon Blossom", value: 45 }
+      ]
+    };
 
-    function updatePlants() {
-      const selectedCategory = categorySelect.value;
+    const searchInput = document.getElementById("mutation-search");
+    const suggestionsEl = document.getElementById("mutation-suggestions");
+    const selectedEl = document.getElementById("selected-mutations");
+    let selectedMutations = [];
+
+    searchInput.addEventListener("input", () => {
+      const query = searchInput.value.toLowerCase().trim();
+      suggestionsEl.innerHTML = "";
+      if (!query) {
+        suggestionsEl.style.display = "none";
+        return;
+      }
+      const filtered = Object.keys(mutations).filter(
+        m => m.includes(query) && !selectedMutations.includes(m)
+      );
+      filtered.forEach(mutation => {
+        const div = document.createElement("div");
+        div.textContent = `${mutation} (+${mutations[mutation]})`;
+        div.onclick = () => {
+          selectedMutations.push(mutation);
+          renderChips();
+          suggestionsEl.style.display = "none";
+          searchInput.value = "";
+        };
+        suggestionsEl.appendChild(div);
+      });
+      suggestionsEl.style.display = filtered.length ? "block" : "none";
+    });
+
+    function renderChips() {
+      selectedEl.innerHTML = "";
+      selectedMutations.forEach(mutation => {
+        const chip = document.createElement("div");
+        chip.className = "chip";
+        chip.textContent = mutation;
+        chip.onclick = () => {
+          selectedMutations = selectedMutations.filter(m => m !== mutation);
+          renderChips();
+        };
+        selectedEl.appendChild(chip);
+      });
+    }
+
+    function updatePlantOptions() {
+      const category = document.getElementById("category").value;
+      const plantSelect = document.getElementById("plant");
       plantSelect.innerHTML = "";
-      plants[selectedCategory].forEach(plant => {
+      plantOptions[category].forEach(({ name }) => {
         const option = document.createElement("option");
-        option.value = plant;
-        option.textContent = plant;
+        option.value = name;
+        option.textContent = name;
         plantSelect.appendChild(option);
       });
     }
 
-    categorySelect.addEventListener("change", updatePlants);
-    window.addEventListener("DOMContentLoaded", updatePlants);
-
     function calculateUnified() {
-      const category = categorySelect.value;
-      const plant = plantSelect.value;
       const mass = parseFloat(document.getElementById("mass").value);
-      const multiplier = parseFloat(document.getElementById("multiplier").value);
-      const resultEl = document.getElementById("result");
-
-      if (isNaN(mass) || isNaN(multiplier)) {
-        resultEl.textContent = '⚠️ Please enter valid numbers.';
+      if (isNaN(mass)) {
+        document.getElementById("result").textContent = "⚠️ Please enter a valid mass.";
         return;
       }
 
-      const price = Math.floor(1 * mass * mass * multiplier); // Placeholder formula
-      resultEl.textContent = `💰 Estimated Price for ${plant}: ₵${price.toLocaleString()}`;
+      const category = document.getElementById("category").value;
+      const plantName = document.getElementById("plant").value;
+      const plantData = plantOptions[category].find(p => p.name === plantName);
+      const baseValue = plantData ? plantData.value : 1;
+
+      const mutationSum = selectedMutations.reduce((sum, mut) => sum + mutations[mut], 0);
+      const variant = parseFloat(document.getElementById("variant").value);
+
+      const price = Math.floor((1 + mutationSum) * variant * mass * mass * baseValue);
+      document.getElementById("result").textContent = `💰 Estimated Price for ${plantName}: ₵${price.toLocaleString()}`;
     }
+
+    window.onload = updatePlantOptions;
   </script>
 </body>
 </html>
