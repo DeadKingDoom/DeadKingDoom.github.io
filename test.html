@@ -12,8 +12,6 @@
       --panel-shadow: rgba(0,0,0,0.1);
       --transition-speed: 0.3s;
     }
-
-    /* 1. Base Layout */
     body {
       margin: 0;
       display: grid;
@@ -21,8 +19,7 @@
       height: 100vh;
       font-family: Arial, sans-serif;
     }
-
-    /* 2. Sidebar */
+    /* Sidebar */
     .sidebar {
       background: var(--sidebar-bg);
       color: var(--sidebar-color);
@@ -36,6 +33,7 @@
     }
     .sidebar h2 {
       margin-top: 0;
+      margin-bottom: 1rem;
     }
     .sidebar button {
       background: none;
@@ -51,56 +49,94 @@
     .sidebar button[aria-expanded="true"] {
       background: rgba(255,255,255,0.1);
     }
-
-    /* 3. Main Content */
+    /* Main Content */
     .content {
       margin-left: 250px;
       padding: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
       overflow-y: auto;
+      background: #f9f9f9;
     }
-
-    /* 4. Slide-Out Panels */
+    /* Slide-out Panel adjacent to sidebar */
     .panel {
       position: fixed;
       top: 0;
-      right: -300px;
+      left: 250px;
       width: 300px;
       height: 100%;
       background: var(--panel-bg);
-      box-shadow: -4px 0 12px var(--panel-shadow);
+      box-shadow: 4px 0 12px var(--panel-shadow);
       padding: 1rem;
       display: flex;
       flex-direction: column;
-      transition: right var(--transition-speed) ease;
+      transform: translateX(-100%);
+      transition: transform var(--transition-speed) ease;
       overflow-y: auto;
+      z-index: 10;
     }
     .panel.active {
-      right: 0;
+      transform: translateX(0);
     }
-
-    /* 5. Responsive Collapse */
+    .panel h3 {
+      margin-top: 0;
+      margin-bottom: 1rem;
+    }
+    .panel .back-btn {
+      background: none;
+      border: none;
+      color: #777;
+      padding: 0.5rem 0;
+      text-align: left;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+    .panel label,
+    .panel select,
+    .panel input,
+    .panel button.calc {
+      width: 100%;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+    .panel select,
+    .panel input {
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .panel button.calc {
+      background: #28a745;
+      color: #fff;
+      border: none;
+      padding: 0.75rem;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .panel button.calc:hover {
+      background: #218838;
+    }
+    .panel .result {
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: #2c3e50;
+      margin-top: auto;
+    }
+    /* Responsive adjustments */
     @media (max-width: 768px) {
-      body {
-        grid-template-columns: 1fr;
-      }
-      .sidebar {
-        position: relative;
-        width: 100%;
-        height: auto;
-        flex-direction: row;
-        overflow-x: auto;
-      }
-      .content {
-        margin-left: 0;
-      }
+      body { grid-template-columns: 1fr; }
+      .sidebar { position: relative; width: 100%; display: flex; flex-direction: row; overflow-x: auto; }
+      .content { margin-left: 0; }
+      .panel { left: 0; width: 100%; transform: translateY(-100%); transition: transform var(--transition-speed) ease; }
+      .panel.active { transform: translateY(0); }
     }
   </style>
 </head>
 <body>
-
-  <!-- Sidebar Navigation -->
   <nav class="sidebar">
-    <h2>Categories</h2>
+    <h2>Categories</n2>
     <button onclick="togglePanel('public')" aria-expanded="false">Public Crops</button>
     <button onclick="togglePanel('normal')" aria-expanded="false">Normal Seed Pack</button>
     <button onclick="togglePanel('premium')" aria-expanded="false">Premium Seed Pack</button>
@@ -109,47 +145,77 @@
     <button onclick="togglePanel('lunar')" aria-expanded="false">Lunar Glow Event</button>
   </nav>
 
-  <!-- Main Calculator Area -->
   <main class="content">
-    <h1>🌱 Grow a Garden Calculator</h1>
-    <p>Select a category to see its plants.</p>
-    <!-- Your calculator form will go here -->
+    <div class="welcome">
+      <h1>🌱 Grow a Garden Calculator</h1>
+      <p>Select a category to begin calculating your plant's value.</p>
+    </div>
   </main>
 
-  <!-- Slide-Out Panels for Each Category -->
+  <!-- Panels -->
   <section id="public-panel" class="panel" aria-hidden="true">
-    <button onclick="closePanel('public')" style="align-self:flex-end;">× Close</button>
+    <button class="back-btn" onclick="closePanel('public')">← Back</button>
     <h3>Public Crops</h3>
     <select id="plant-public">
-      <!-- options... -->
+      <option>Carrot</option>
+      <option>Strawberry</option>
+      <option>Blueberry</option>
+      <option>Orange Tulip</option>
+      <option>Tomato</option>
+      <option>Corn</option>
+      <option>Daffodil</option>
+      <option>Watermelon</option>
+      <option>Pumpkin</option>
+      <option>Apple</option>
+      <option>Bamboo</option>
+      <option>Coconut</option>
+      <option>Cactus</option>
+      <option>Dragon Fruit</option>
+      <option>Mango</option>
+      <option>Grape</option>
+      <option>Mushroom</option>
+      <option>Pepper</option>
+      <option>Cacao</option>
     </select>
-    <!-- mass, multiplier inputs, calculate button, result -->
+    <label>Mass (kg)</label>
+    <input type="number" id="mass-public" step="0.01" placeholder="e.g. 24.02">
+    <label>Mutation Multiplier</label>
+    <input type="number" id="multiplier-public" value="2200">
+    <button class="calc" onclick="calculate('public')">Calculate</button>
+    <div class="result" id="result-public"></div>
   </section>
 
-  <!-- Repeat panels for 'normal', 'premium', 'exotic', 'easter', 'lunar' -->
+  <!-- Additional panels for normal, premium, exotic, easter, lunar -->
+  <!-- ...repeat structure, with id="normal-panel", select id="plant-normal" etc. -->
 
   <script>
     function togglePanel(cat) {
-      // Close any open panels
-      document.querySelectorAll('.panel.active').forEach(p => {
-        p.classList.remove('active');
-        p.setAttribute('aria-hidden','true');
-        document.querySelector(`button[onclick="togglePanel('${p.id.split('-')[0]}')"]`)
-                .setAttribute('aria-expanded','false');
-      });
-      // Open the requested panel
+      // close others
+      document.querySelectorAll('.panel.active').forEach(p => closePanel(p.id.split('-')[0]));
       const panel = document.getElementById(`${cat}-panel`);
       panel.classList.add('active');
-      panel.setAttribute('aria-hidden','false');
-      document.querySelector(`button[onclick="togglePanel('${cat}')"]`)
-              .setAttribute('aria-expanded','true');
+      panel.setAttribute('aria-hidden', 'false');
+      document.querySelector(`button[onclick="togglePanel('${cat}')"]`).setAttribute('aria-expanded', 'true');
     }
     function closePanel(cat) {
       const panel = document.getElementById(`${cat}-panel`);
+      if (!panel) return;
       panel.classList.remove('active');
-      panel.setAttribute('aria-hidden','true');
-      document.querySelector(`button[onclick="togglePanel('${cat}')"]`)
-              .setAttribute('aria-expanded','false');
+      panel.setAttribute('aria-hidden', 'true');
+      document.querySelector(`button[onclick="togglePanel('${cat}')"]`).setAttribute('aria-expanded', 'false');
+    }
+    function calculate(cat) {
+      const mass = parseFloat(document.getElementById(`mass-${cat}`).value);
+      const mult = parseFloat(document.getElementById(`multiplier-${cat}`).value);
+      const plant = document.getElementById(`plant-${cat}`).value;
+      const resultEl = document.getElementById(`result-${cat}`);
+      if (isNaN(mass) || isNaN(mult)) {
+        resultEl.textContent = '⚠️ Please enter valid numbers.';
+        return;
+      }
+      // your formula logic here
+      const price = Math.floor(1 * mass * mass * mult); // placeholder
+      resultEl.textContent = `💰 ${plant}: ₵${price.toLocaleString()}`;
     }
   </script>
 </body>
