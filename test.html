@@ -1,240 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Grow a Garden Calculator</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(#d4f7e5, #ffffff);
-      padding: 2rem;
-      margin: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
+<style>
+  :root {
+    --primary: #2d6a4f;
+    --accent: #95d5b2;
+  }
+  body { margin:0; font-family:Inter,sans-serif; height:100vh; display:flex; overflow:hidden;}
+  .tiles { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:1rem; padding:2rem; width:100%; }
+  .tile { background:var(--primary); color:#fff; display:flex; align-items:center; justify-content:center; font-size:1.2rem; cursor:pointer; border-radius:8px; transition:transform .2s; }
+  .tile:hover { transform:scale(1.05);}
+  .panel { position:absolute; top:0; right:-100%; width:100%; max-width:400px; height:100%; background:#fff; box-shadow:-4px 0 12px rgba(0,0,0,.1); padding:2rem; display:flex; flex-direction:column; transition:right .3s ease; }
+  .panel.active { right:0; }
+  .close { margin-bottom:1rem; background:none;border:none;color:var(--primary);cursor:pointer;font-size:1rem;text-align:left; }
+</style>
 
-    h1 {
-      margin-bottom: 0.5rem;
-      font-size: 2rem;
-      color: #333;
-    }
+<div class="tiles">
+  <div class="tile" onclick="openPanel('public')">Public Crops</div>
+  <div class="tile" onclick="openPanel('normal')">Normal Seed Pack</div>
+  <div class="tile" onclick="openPanel('premium')">Premium Seed Pack</div>
+  <div class="tile" onclick="openPanel('exotic')">Exotic Seed Pack</div>
+  <div class="tile" onclick="openPanel('easter')">Easter Event</div>
+  <div class="tile" onclick="openPanel('lunar')">Lunar Glow Event</div>
+</div>
 
-    .categories {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1rem;
-      margin-bottom: 2rem;
-    }
+<div id="panel" class="panel">
+  <button class="close" onclick="closePanel()">← Back</button>
+  <div id="panel-content"><!-- JS injects the right subpage here --></div>
+</div>
 
-    .categories button {
-      padding: 0.75rem 1.5rem;
-      font-size: 1rem;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      background-color: #28a745;
-      color: white;
-      transition: background-color 0.2s;
-    }
-
-    .categories button:hover {
-      background-color: #218838;
-    }
-
-    .subpage {
-      background: #fff;
-      padding: 2rem;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      width: 100%;
-      max-width: 400px;
-      display: none;
-      flex-direction: column;
-      align-items: stretch;
-    }
-
-    .subpage.active {
-      display: flex;
-    }
-
-    label {
-      margin-bottom: 0.5rem;
-      color: #333;
-    }
-
-    input, button, select {
-      width: 100%;
-      padding: 0.75rem;
-      font-size: 1rem;
-      margin-bottom: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-    }
-
-    button.calc {
-      background-color: #007bff;
-      color: white;
-    }
-
-    button.calc:hover {
-      background-color: #0069d9;
-    }
-
-    .result {
-      font-size: 1.2rem;
-      font-weight: bold;
-      text-align: center;
-      margin-top: 1rem;
-      color: #2c3e50;
-    }
-
-    .back-btn {
-      background: none;
-      color: #555;
-      border: none;
-      margin-bottom: 1rem;
-      text-align: left;
-      cursor: pointer;
-    }
-  </style>
-</head>
-<body>
-  <h1>🌱 Grow a Garden Calculator</h1>
-  <p>Select a category to begin:</p>
-
-  <div class="categories">
-    <button onclick="openCategory('public')">Public Crops</button>
-    <button onclick="openCategory('normal')">Normal Seed Pack</button>
-    <button onclick="openCategory('premium')">Premium Seed Pack</button>
-    <button onclick="openCategory('exotic')">Exotic Seed Pack</button>
-    <button onclick="openCategory('easter')">Easter Event</button>
-    <button onclick="openCategory('lunar')">Lunar Glow Event</button>
-  </div>
-
-  <!-- Subpage templates -->
-  <div id="public" class="subpage">
-    <button class="back-btn" onclick="goHome()">← Back to categories</button>
-    <h2>Public Crops</h2>
-    <select id="plant-public">
-      <option>Carrot</option><option>Strawberry</option><option>Blueberry</option>
-      <option>Orange Tulip</option><option>Tomato</option><option>Corn</option>
-      <option>Daffodil</option><option>Watermelon</option><option>Pumpkin</option>
-      <option>Apple</option><option>Bamboo</option><option>Coconut</option>
-      <option>Cactus</option><option>Dragon Fruit</option><option>Mango</option>
-      <option>Grape</option><option>Mushroom</option><option>Pepper</option>
-      <option>Cacao</option>
-    </select>
-    <label for="mass-public">Mass (kg)</label>
-    <input type="number" id="mass-public" step="0.01" placeholder="e.g. 24.02">
-    <label for="multiplier-public">Mutation Multiplier</label>
-    <input type="number" id="multiplier-public" value="2200">
-    <button class="calc" onclick="calculate('public')">Calculate</button>
-    <div class="result" id="result-public"></div>
-  </div>
-
-  <!-- Repeat for other categories -->
-  <div id="normal" class="subpage">
-    <button class="back-btn" onclick="goHome()">← Back to categories</button>
-    <h2>Normal Seed Pack</h2>
-    <select id="plant-normal">
-      <option>Lemon</option><option>Pineapple</option><option>Peach</option>
-      <option>Raspberry</option><option>Pear</option>
-    </select>
-    <label for="mass-normal">Mass (kg)</label>
-    <input type="number" id="mass-normal" step="0.01" placeholder="e.g. 24.02">
-    <label for="multiplier-normal">Mutation Multiplier</label>
-    <input type="number" id="multiplier-normal" value="2200">
-    <button class="calc" onclick="calculate('normal')">Calculate</button>
-    <div class="result" id="result-normal"></div>
-  </div>
-
-  <div id="premium" class="subpage">
-    <button class="back-btn" onclick="goHome()">← Back to categories</button>
-    <h2>Premium Seed Pack</h2>
-    <select id="plant-premium">
-      <option>Raspberry</option><option>Cranberry</option><option>Durian</option>
-      <option>Eggplant</option><option>Venus Flytrap</option><option>Lotus</option>
-    </select>
-    <label for="mass-premium">Mass (kg)</label>
-    <input type="number" id="mass-premium" step="0.01" placeholder="e.g. 24.02">
-    <label for="multiplier-premium">Mutation Multiplier</label>
-    <input type="number" id="multiplier-premium" value="2200">
-    <button class="calc" onclick="calculate('premium')">Calculate</button>
-    <div class="result" id="result-premium"></div>
-  </div>
-
-  <div id="exotic" class="subpage">
-    <button class="back-btn" onclick="goHome()">← Back to categories</button>
-    <h2>Exotic Seed Pack</h2>
-    <select id="plant-exotic">
-      <option>Papaya</option><option>Banana</option><option>Passionfruit</option>
-      <option>Soul Fruit</option><option>Cursed Fruit</option>
-    </select>
-    <label for="mass-exotic">Mass (kg)</label>
-    <input type="number" id="mass-exotic" step="0.01" placeholder="e.g. 24.02">
-    <label for="multiplier-exotic">Mutation Multiplier</label>
-    <input type="number" id="multiplier-exotic" value="2200">
-    <button class="calc" onclick="calculate('exotic')">Calculate</button>
-    <div class="result" id="result-exotic"></div>
-  </div>
-
-  <div id="easter" class="subpage">
-    <button class="back-btn" onclick="goHome()">← Back to categories</button>
-    <h2>Easter Event</h2>
-    <select id="plant-easter">
-      <option>Chocolate Carrot</option><option>Candy Sunflower</option>
-      <option>Easter Egg</option><option>Red Lollipop</option><option>Candy Blossom</option>
-    </select>
-    <label for="mass-easter">Mass (kg)</label>
-    <input type="number" id="mass-easter" step="0.01" placeholder="e.g. 24.02">
-    <label for="multiplier-easter">Mutation Multiplier</label>
-    <input type="number" id="multiplier-easter" value="2200">
-    <button class="calc" onclick="calculate('easter')">Calculate</button>
-    <div class="result" id="result-easter"></div>
-  </div>
-
-  <div id="lunar" class="subpage">
-    <button class="back-btn" onclick="goHome()">← Back to categories</button>
-    <h2>Lunar Glow Event</h2>
-    <select id="plant-lunar">
-      <option>Nightshade</option><option>Glowshroom</option><option>Mint</option>
-      <option>Moonflower</option><option>Starfruit</option><option>Moonglow</option>
-      <option>Moon Blossom</option>
-    </select>
-    <label for="mass-lunar">Mass (kg)</label>
-    <input type="number" id="mass-lunar" step="0.01" placeholder="e.g. 24.02">
-    <label for="multiplier-lunar">Mutation Multiplier</label>
-    <input type="number" id="multiplier-lunar" value="2200">
-    <button class="calc" onclick="calculate('lunar')">Calculate</button>
-    <div class="result" id="result-lunar"></div>
-  </div>
-
-  <!-- JavaScript -->
-  <script>
-    function openCategory(cat) {
-      document.querySelectorAll('.subpage').forEach(div => div.classList.remove('active'));
-      document.querySelector('.categories').style.display = 'none';
-      document.getElementById(cat).classList.add('active');
-    }
-    function goHome() {
-      document.querySelectorAll('.subpage').forEach(div => div.classList.remove('active'));
-      document.querySelector('.categories').style.display = 'flex';
-    }
-    function calculate(cat) {
-      const mass = parseFloat(document.getElementById(`mass-${cat}`).value);
-      const mult = parseFloat(document.getElementById(`multiplier-${cat}`).value);
-      const plant = document.getElementById(`plant-${cat}`).value;
-      const resultEl = document.getElementById(`result-${cat}`);
-      if (isNaN(mass) || isNaN(mult)) {
-        resultEl.textContent = '⚠️ Please enter valid numbers.';
-        return;
-      }
-      // Insert your formula logic here based on `plant` and `mass`, `mult`
-      const price = Math.floor(1 * mass * mass * mult); // Placeholder
-      resultEl.textContent = `💰 Estimated Price for ${plant}: ₵${price.toLocaleString()}`;
-    }
-  </script>
-</body>
-</html>
+<script>
+  function openPanel(cat) {
+    document.getElementById('panel').classList.add('active');
+    document.getElementById('panel-content').innerHTML = document.getElementById(cat).innerHTML;
+  }
+  function closePanel() {
+    document.getElementById('panel').classList.remove('active');
+  }
+  // calculate() unchanged
+</script>
