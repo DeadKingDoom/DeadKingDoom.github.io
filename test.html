@@ -5,216 +5,309 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Grow a Garden Calculator</title>
   <style>
-    :root {
-      --sidebar-bg: #2d6a4f;
-      --sidebar-color: #fff;
-      --panel-bg: #fff;
-      --panel-shadow: rgba(0,0,0,0.1);
-      --transition-speed: 0.3s;
-    }
     body {
       margin: 0;
-      display: grid;
-      grid-template-columns: 250px 1fr;
-      height: 100vh;
       font-family: Arial, sans-serif;
+    }
+    .container {
+      display: flex;
+      height: 100vh;
+      position: relative;
     }
     /* Sidebar */
     .sidebar {
-      background: var(--sidebar-bg);
-      color: var(--sidebar-color);
-      display: flex;
-      flex-direction: column;
-      padding: 1rem;
-      position: fixed;
       width: 250px;
-      height: 100%;
-      overflow-y: auto;
+      background-color: #2e6b50;
+      color: #fff;
+      padding: 20px;
+      box-sizing: border-box;
     }
     .sidebar h2 {
       margin-top: 0;
-      margin-bottom: 1rem;
     }
     .sidebar button {
-      background: none;
-      border: none;
-      color: inherit;
-      padding: 0.75rem;
-      text-align: left;
+      display: block;
+      margin: 10px 0;
       width: 100%;
+      padding: 10px;
+      background: #387c63;
+      border: none;
+      color: #fff;
       cursor: pointer;
-      transition: background var(--transition-speed);
+      text-align: left;
+      border-radius: 4px;
+      transition: background 0.2s;
     }
-    .sidebar button:hover,
-    .sidebar button[aria-expanded="true"] {
-      background: rgba(255,255,255,0.1);
+    .sidebar button:hover {
+      background: #45a078;
     }
-    /* Main Content */
-    .content {
-      margin-left: 250px;
-      padding: 2rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100%;
-      overflow-y: auto;
-      background: #f9f9f9;
-    }
-    /* Slide-out Panel adjacent to sidebar */
-    .panel {
-      position: fixed;
+    /* Panel sliding out */
+    .plant-panel {
+      width: 220px;
+      background-color: #f0f0f0;
+      padding: 20px;
+      box-sizing: border-box;
+      display: none;
+      position: absolute;
       top: 0;
       left: 250px;
-      width: 300px;
-      height: 100%;
-      background: var(--panel-bg);
-      box-shadow: 4px 0 12px var(--panel-shadow);
-      padding: 1rem;
-      display: flex;
-      flex-direction: column;
-      transform: translateX(-100%);
-      transition: transform var(--transition-speed) ease;
+      height: 100vh;
+      border-left: 1px solid #ccc;
       overflow-y: auto;
-      z-index: 10;
     }
-    .panel.active {
-      transform: translateX(0);
+    .plant-panel.active {
+      display: block;
     }
-    .panel h3 {
+    .plant-panel h3 {
       margin-top: 0;
-      margin-bottom: 1rem;
     }
-    .panel .back-btn {
-      background: none;
-      border: none;
-      color: #777;
-      padding: 0.5rem 0;
-      text-align: left;
-      cursor: pointer;
-      font-size: 0.9rem;
-    }
-    .panel label,
-    .panel select,
-    .panel input,
-    .panel button.calc {
+    .plant-panel label,
+    .plant-panel select,
+    .plant-panel input,
+    .plant-panel button {
       width: 100%;
-      margin-bottom: 1rem;
+      margin-bottom: 10px;
       font-size: 1rem;
     }
-    .panel select,
-    .panel input {
-      padding: 0.5rem;
+    .plant-panel select,
+    .plant-panel input {
+      padding: 8px;
       border: 1px solid #ccc;
       border-radius: 4px;
     }
-    .panel button.calc {
+    .plant-panel button {
+      padding: 10px;
       background: #28a745;
-      color: #fff;
       border: none;
-      padding: 0.75rem;
+      color: #fff;
       border-radius: 4px;
       cursor: pointer;
+      transition: background 0.2s;
     }
-    .panel button.calc:hover {
+    .plant-panel button:hover {
       background: #218838;
     }
-    .panel .result {
-      font-size: 1.1rem;
-      font-weight: bold;
-      color: #2c3e50;
-      margin-top: auto;
+    .plant-panel .back-btn {
+      background: none;
+      border: none;
+      color: #555;
+      margin-bottom: 10px;
+      text-align: left;
+      cursor: pointer;
     }
-    /* Responsive adjustments */
-    @media (max-width: 768px) {
-      body { grid-template-columns: 1fr; }
-      .sidebar { position: relative; width: 100%; display: flex; flex-direction: row; overflow-x: auto; }
-      .content { margin-left: 0; }
-      .panel { left: 0; width: 100%; transform: translateY(-100%); transition: transform var(--transition-speed) ease; }
-      .panel.active { transform: translateY(0); }
+    .plant-panel .result {
+      font-weight: bold;
+      margin-top: 20px;
+      color: #333;
+    }
+    /* Main area */
+    .main {
+      flex: 1;
+      padding: 40px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      background: #f9f9f9;
+    }
+    .main h1 {
+      margin-bottom: 10px;
+    }
+    .main form {
+      max-width: 300px;
+      width: 100%;
+    }
+    .main label,
+    .main input,
+    .main button {
+      width: 100%;
+      margin-bottom: 10px;
+      font-size: 1rem;
+    }
+    .main input {
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .main button {
+      padding: 10px;
+      background: #007bff;
+      border: none;
+      color: #fff;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .main button:hover {
+      background: #0069d9;
     }
   </style>
 </head>
 <body>
-  <nav class="sidebar">
-    <h2>Categories</n2>
-    <button onclick="togglePanel('public')" aria-expanded="false">Public Crops</button>
-    <button onclick="togglePanel('normal')" aria-expanded="false">Normal Seed Pack</button>
-    <button onclick="togglePanel('premium')" aria-expanded="false">Premium Seed Pack</button>
-    <button onclick="togglePanel('exotic')" aria-expanded="false">Exotic Seed Pack</button>
-    <button onclick="togglePanel('easter')" aria-expanded="false">Easter Event</button>
-    <button onclick="togglePanel('lunar')" aria-expanded="false">Lunar Glow Event</button>
-  </nav>
+  <div class="container">
+    <nav class="sidebar">
+      <h2>Categories</h2>
+      <button onclick="showPanel('public')">Public Crops</button>
+      <button onclick="showPanel('normal')">Normal Seed Pack</button>
+      <button onclick="showPanel('premium')">Premium Seed Pack</button>
+      <button onclick="showPanel('exotic')">Exotic Seed Pack</button>
+      <button onclick="showPanel('easter')">Easter Event</button>
+      <button onclick="showPanel('lunar')">Lunar Glow Event</button>
+    </nav>
 
-  <main class="content">
-    <div class="welcome">
-      <h1>🌱 Grow a Garden Calculator</h1>
-      <p>Select a category to begin calculating your plant's value.</p>
+    <!-- Panels -->
+    <div id="public-panel" class="plant-panel">
+      <button class="back-btn" onclick="hidePanels()">← Back</button>
+      <h3>Public Crops</h3>
+      <select id="plant-public">
+        <option>Carrot</option>
+        <option>Strawberry</option>
+        <option>Blueberry</option>
+        <option>Orange Tulip</option>
+        <option>Tomato</option>
+        <option>Corn</option>
+        <option>Daffodil</option>
+        <option>Watermelon</option>
+        <option>Pumpkin</option>
+        <option>Apple</option>
+        <option>Bamboo</option>
+        <option>Coconut</option>
+        <option>Cactus</option>
+        <option>Dragon Fruit</option>
+        <option>Mango</option>
+        <option>Grape</option>
+        <option>Mushroom</option>
+        <option>Pepper</option>
+        <option>Cacao</option>
+      </select>
+      <label>Mass (kg)</label>
+      <input type="number" id="mass-public" step="0.01" placeholder="e.g. 24.02">
+      <label>Multiplier</label>
+      <input type="number" id="multiplier-public" value="2200">
+      <button onclick="calculate('public')">Calculate</button>
+      <div class="result" id="result-public"></div>
     </div>
-  </main>
 
-  <!-- Panels -->
-  <section id="public-panel" class="panel" aria-hidden="true">
-    <button class="back-btn" onclick="closePanel('public')">← Back</button>
-    <h3>Public Crops</h3>
-    <select id="plant-public">
-      <option>Carrot</option>
-      <option>Strawberry</option>
-      <option>Blueberry</option>
-      <option>Orange Tulip</option>
-      <option>Tomato</option>
-      <option>Corn</option>
-      <option>Daffodil</option>
-      <option>Watermelon</option>
-      <option>Pumpkin</option>
-      <option>Apple</option>
-      <option>Bamboo</option>
-      <option>Coconut</option>
-      <option>Cactus</option>
-      <option>Dragon Fruit</option>
-      <option>Mango</option>
-      <option>Grape</option>
-      <option>Mushroom</option>
-      <option>Pepper</option>
-      <option>Cacao</option>
-    </select>
-    <label>Mass (kg)</label>
-    <input type="number" id="mass-public" step="0.01" placeholder="e.g. 24.02">
-    <label>Mutation Multiplier</label>
-    <input type="number" id="multiplier-public" value="2200">
-    <button class="calc" onclick="calculate('public')">Calculate</button>
-    <div class="result" id="result-public"></div>
-  </section>
+    <div id="normal-panel" class="plant-panel">
+      <button class="back-btn" onclick="hidePanels()">← Back</button>
+      <h3>Normal Seed Pack</h3>
+      <select id="plant-normal">
+        <option>Lemon</option>
+        <option>Pineapple</option>
+        <option>Peach</option>
+        <option>Raspberry</option>
+        <option>Pear</option>
+      </select>
+      <label>Mass (kg)</label>
+      <input type="number" id="mass-normal" step="0.01" placeholder="e.g. 24.02">
+      <label>Multiplier</label>
+      <input type="number" id="multiplier-normal" value="2200">
+      <button onclick="calculate('normal')">Calculate</button>
+      <div class="result" id="result-normal"></div>
+    </div>
 
-  <!-- Additional panels for normal, premium, exotic, easter, lunar -->
-  <!-- ...repeat structure, with id="normal-panel", select id="plant-normal" etc. -->
+    <div id="premium-panel" class="plant-panel">
+      <button class="back-btn" onclick="hidePanels()">← Back</button>
+      <h3>Premium Seed Pack</h3>
+      <select id="plant-premium">
+        <option>Raspberry</option>
+        <option>Cranberry</option>
+        <option>Durian</option>
+        <option>Eggplant</option>
+        <option>Venus Flytrap</option>
+        <option>Lotus</option>
+      </select>
+      <label>Mass (kg)</label>
+      <input type="number" id="mass-premium" step="0.01" placeholder="e.g. 24.02">
+      <label>Multiplier</label>
+      <input type="number" id="multiplier-premium" value="2200">
+      <button onclick="calculate('premium')">Calculate</button>
+      <div class="result" id="result-premium"></div>
+    </div>
+
+    <div id="exotic-panel" class="plant-panel">
+      <button class="back-btn" onclick="hidePanels()">← Back</button>
+      <h3>Exotic Seed Pack</h3>
+      <select id="plant-exotic">
+        <option>Papaya</option>
+        <option>Banana</option>
+        <option>Passionfruit</option>
+        <option>Soul Fruit</option>
+        <option>Cursed Fruit</option>
+      </select>
+      <label>Mass (kg)</label>
+      <input type="number" id="mass-exotic" step="0.01" placeholder="e.g. 24.02">
+      <label>Multiplier</label>
+      <input type="number" id="multiplier-exotic" value="2200">
+      <button onclick="calculate('exotic')">Calculate</button>
+      <div class="result" id="result-exotic"></div>
+    </div>
+
+    <div id="easter-panel" class="plant-panel">
+      <button class="back-btn" onclick="hidePanels()">← Back</button>
+      <h3>Easter Event</h3>
+      <select id="plant-easter">
+        <option>Chocolate Carrot</option>
+        <option>Candy Sunflower</option>
+        <option>Easter Egg</option>
+        <option>Red Lollipop</option>
+        <option>Candy Blossom</option>
+      </select>
+      <label>Mass (kg)</label>
+      <input type="number" id="mass-easter" step="0.01" placeholder="e.g. 24.02">
+      <label>Multiplier</label>
+      <input type="number" id="multiplier-easter" value="2200">
+      <button onclick="calculate('easter')">Calculate</button>
+      <div class="result" id="result-easter"></div>
+    </div>
+
+    <div id="lunar-panel" class="plant-panel">
+      <button class="back-btn" onclick="hidePanels()">← Back</button>
+      <h3>Lunar Glow Event</h3>
+      <select id="plant-lunar">
+        <option>Nightshade</option>
+        <option>Glowshroom</option>
+        <option>Mint</option>
+        <option>Moonflower</option>
+        <option>Starfruit</option>
+        <option>Moonglow</option>
+        <option>Moon Blossom</option>
+      </select>
+      <label>Mass (kg)</label>
+      <input type="number" id="mass-lunar" step="0.01" placeholder="e.g. 24.02">
+      <label>Multiplier</label>
+      <input type="number" id="multiplier-lunar" value="2200">
+      <button onclick="calculate('lunar')">Calculate</button>
+      <div class="result" id="result-lunar"></div>
+    </div>
+
+    <div class="main">
+      <h1>🌱 Grow a Garden Calculator</h1>
+      <p>Select a category from the left to begin.</p>
+    </div>
+  </div>
 
   <script>
-    function togglePanel(cat) {
-      // close others
-      document.querySelectorAll('.panel.active').forEach(p => closePanel(p.id.split('-')[0]));
-      const panel = document.getElementById(`${cat}-panel`);
-      panel.classList.add('active');
-      panel.setAttribute('aria-hidden', 'false');
-      document.querySelector(`button[onclick="togglePanel('${cat}')"]`).setAttribute('aria-expanded', 'true');
+    function showPanel(cat) {
+      hidePanels();
+      document.getElementById(cat + '-panel').classList.add('active');
     }
-    function closePanel(cat) {
-      const panel = document.getElementById(`${cat}-panel`);
-      if (!panel) return;
-      panel.classList.remove('active');
-      panel.setAttribute('aria-hidden', 'true');
-      document.querySelector(`button[onclick="togglePanel('${cat}')"]`).setAttribute('aria-expanded', 'false');
+    function hidePanels() {
+      document.querySelectorAll('.plant-panel').forEach(p => p.classList.remove('active'));
     }
     function calculate(cat) {
-      const mass = parseFloat(document.getElementById(`mass-${cat}`).value);
-      const mult = parseFloat(document.getElementById(`multiplier-${cat}`).value);
-      const plant = document.getElementById(`plant-${cat}`).value;
-      const resultEl = document.getElementById(`result-${cat}`);
+      const mass = parseFloat(document.getElementById('mass-' + cat).value);
+      const mult = parseFloat(document.getElementById('multiplier-' + cat).value);
+      const plant = document.getElementById('plant-' + cat).value;
+      const resultEl = document.getElementById('result-' + cat);
       if (isNaN(mass) || isNaN(mult)) {
         resultEl.textContent = '⚠️ Please enter valid numbers.';
         return;
       }
-      // your formula logic here
-      const price = Math.floor(1 * mass * mass * mult); // placeholder
+      // Placeholder formula logic
+      const price = Math.floor(mass * mass * mult);
       resultEl.textContent = `💰 ${plant}: ₵${price.toLocaleString()}`;
     }
   </script>
