@@ -3,143 +3,89 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <link rel="stylesheet"href ="styles.css">
+  <link rel="stylesheet" href="styles.css">
   <title>Grow a Garden Calculator</title>
+  <style>
+    .central-container {
+      background: #fff;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 500px;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      margin-top: 2rem;
+    }
+  </style>
 </head>
 <body>
   <h1>🌱 Grow a Garden Calculator</h1>
-  <p>Select a category to begin:</p>
-<div id="page">
-    <div class="categories">
-      <button onclick="openCategory('public')">Public Crops</button>
-      <button onclick="openCategory('normal')">Normal Seed Pack</button>
-      <button onclick="openCategory('premium')">Premium Seed Pack</button>
-      <button onclick="openCategory('exotic')">Exotic Seed Pack</button>
-      <button onclick="openCategory('easter')">Easter Event</button>
-      <button onclick="openCategory('lunar')">Lunar Glow Event</button>
-    </div>
-  
-    <!-- Subpage templates -->
-    <div id="public" class="subpage">
-      <button class="back-btn" onclick="goHome()">← Back to categories</button>
-      <h2>Public Crops</h2>
-      <select id="plant-public">
-        <option>Carrot</option><option>Strawberry</option><option>Blueberry</option>
-        <option>Orange Tulip</option><option>Tomato</option><option>Corn</option>
-        <option>Daffodil</option><option>Watermelon</option><option>Pumpkin</option>
-        <option>Apple</option><option>Bamboo</option><option>Coconut</option>
-        <option>Cactus</option><option>Dragon Fruit</option><option>Mango</option>
-        <option>Grape</option><option>Mushroom</option><option>Pepper</option>
-        <option>Cacao</option>
-      </select>
-      <label for="mass-public">Mass (kg)</label>
-      <input type="number" id="mass-public" step="0.01" placeholder="e.g. 24.02">
-      <label for="multiplier-public">Mutation Multiplier</label>
-      <input type="number" id="multiplier-public" value="2200">
-      <button class="calc" onclick="calculate('public')">Calculate</button>
-      <div class="result" id="result-public"></div>
-    </div>
-  
-    <!-- Repeat for other categories -->
-    <div id="normal" class="subpage">
-      <button class="back-btn" onclick="goHome()">← Back to categories</button>
-      <h2>Normal Seed Pack</h2>
-      <select id="plant-normal">
-        <option>Lemon</option><option>Pineapple</option><option>Peach</option>
-        <option>Raspberry</option><option>Pear</option>
-      </select>
-      <label for="mass-normal">Mass (kg)</label>
-      <input type="number" id="mass-normal" step="0.01" placeholder="e.g. 24.02">
-      <label for="multiplier-normal">Mutation Multiplier</label>
-      <input type="number" id="multiplier-normal" value="2200">
-      <button class="calc" onclick="calculate('normal')">Calculate</button>
-      <div class="result" id="result-normal"></div>
-    </div>
-  
-    <div id="premium" class="subpage">
-      <button class="back-btn" onclick="goHome()">← Back to categories</button>
-      <h2>Premium Seed Pack</h2>
-      <select id="plant-premium">
-        <option>Raspberry</option><option>Cranberry</option><option>Durian</option>
-        <option>Eggplant</option><option>Venus Flytrap</option><option>Lotus</option>
-      </select>
-      <label for="mass-premium">Mass (kg)</label>
-      <input type="number" id="mass-premium" step="0.01" placeholder="e.g. 24.02">
-      <label for="multiplier-premium">Mutation Multiplier</label>
-      <input type="number" id="multiplier-premium" value="2200">
-      <button class="calc" onclick="calculate('premium')">Calculate</button>
-      <div class="result" id="result-premium"></div>
-    </div>
-  
-    <div id="exotic" class="subpage">
-      <button class="back-btn" onclick="goHome()">← Back to categories</button>
-      <h2>Exotic Seed Pack</h2>
-      <select id="plant-exotic">
-        <option>Papaya</option><option>Banana</option><option>Passionfruit</option>
-        <option>Soul Fruit</option><option>Cursed Fruit</option>
-      </select>
-      <label for="mass-exotic">Mass (kg)</label>
-      <input type="number" id="mass-exotic" step="0.01" placeholder="e.g. 24.02">
-      <label for="multiplier-exotic">Mutation Multiplier</label>
-      <input type="number" id="multiplier-exotic" value="2200">
-      <button class="calc" onclick="calculate('exotic')">Calculate</button>
-      <div class="result" id="result-exotic"></div>
-    </div>
-  
-    <div id="easter" class="subpage">
-      <button class="back-btn" onclick="goHome()">← Back to categories</button>
-      <h2>Easter Event</h2>
-      <select id="plant-easter">
-        <option>Chocolate Carrot</option><option>Candy Sunflower</option>
-        <option>Easter Egg</option><option>Red Lollipop</option><option>Candy Blossom</option>
-      </select>
-      <label for="mass-easter">Mass (kg)</label>
-      <input type="number" id="mass-easter" step="0.01" placeholder="e.g. 24.02">
-      <label for="multiplier-easter">Mutation Multiplier</label>
-      <input type="number" id="multiplier-easter" value="2200">
-      <button class="calc" onclick="calculate('easter')">Calculate</button>
-      <div class="result" id="result-easter"></div>
-    </div>
-  
-    <div id="lunar" class="subpage">
-      <button class="back-btn" onclick="goHome()">← Back to categories</button>
-      <h2>Lunar Glow Event</h2>
-      <select id="plant-lunar">
-        <option>Nightshade</option><option>Glowshroom</option><option>Mint</option>
-        <option>Moonflower</option><option>Starfruit</option><option>Moonglow</option>
-        <option>Moon Blossom</option>
-      </select>
-      <label for="mass-lunar">Mass (kg)</label>
-      <input type="number" id="mass-lunar" step="0.01" placeholder="e.g. 24.02">
-      <label for="multiplier-lunar">Mutation Multiplier</label>
-      <input type="number" id="multiplier-lunar" value="2200">
-      <button class="calc" onclick="calculate('lunar')">Calculate</button>
-      <div class="result" id="result-lunar"></div>
-    </div>
+  <div class="central-container">
+    <label for="category-select">Select Category</label>
+    <select id="category-select">
+      <option value="public">Public Crops</option>
+      <option value="normal">Normal Seed Pack</option>
+      <option value="premium">Premium Seed Pack</option>
+      <option value="exotic">Exotic Seed Pack</option>
+      <option value="easter">Easter Event</option>
+      <option value="lunar">Lunar Glow Event</option>
+    </select>
+
+    <label for="plant-select">Select Plant</label>
+    <select id="plant-select"></select>
+
+    <label for="mass">Mass (kg)</label>
+    <input type="number" id="mass" step="0.01" placeholder="e.g. 24.02">
+
+    <label for="multiplier">Mutation Multiplier</label>
+    <input type="number" id="multiplier" value="2200">
+
+    <button class="calc" onclick="calculateUnified()">Calculate</button>
+    <div class="result" id="result"></div>
   </div>
 
-  <!-- JavaScript -->
   <script>
-    function openCategory(cat) {
-      document.querySelectorAll('.subpage').forEach(div => div.classList.remove('active'));
-      document.querySelector('.categories').style.display = 'none';
-      document.getElementById(cat).classList.add('active');
+    const plants = {
+      public: ["Carrot", "Strawberry", "Blueberry", "Orange Tulip", "Tomato", "Corn", "Daffodil", "Watermelon", "Pumpkin", "Apple", "Bamboo", "Coconut", "Cactus", "Dragon Fruit", "Mango", "Grape", "Mushroom", "Pepper", "Cacao"],
+      normal: ["Lemon", "Pineapple", "Peach", "Raspberry", "Pear"],
+      premium: ["Raspberry", "Cranberry", "Durian", "Eggplant", "Venus Flytrap", "Lotus"],
+      exotic: ["Papaya", "Banana", "Passionfruit", "Soul Fruit", "Cursed Fruit"],
+      easter: ["Chocolate Carrot", "Candy Sunflower", "Easter Egg", "Red Lollipop", "Candy Blossom"],
+      lunar: ["Nightshade", "Glowshroom", "Mint", "Moonflower", "Starfruit", "Moonglow", "Moon Blossom"]
+    };
+
+    const categorySelect = document.getElementById("category-select");
+    const plantSelect = document.getElementById("plant-select");
+
+    function updatePlants() {
+      const selectedCategory = categorySelect.value;
+      plantSelect.innerHTML = "";
+      plants[selectedCategory].forEach(plant => {
+        const option = document.createElement("option");
+        option.value = plant;
+        option.textContent = plant;
+        plantSelect.appendChild(option);
+      });
     }
-    function goHome() {
-      document.querySelectorAll('.subpage').forEach(div => div.classList.remove('active'));
-      document.querySelector('.categories').style.display = 'flex';
-    }
-    function calculate(cat) {
-      const mass = parseFloat(document.getElementById(`mass-${cat}`).value);
-      const mult = parseFloat(document.getElementById(`multiplier-${cat}`).value);
-      const plant = document.getElementById(`plant-${cat}`).value;
-      const resultEl = document.getElementById(`result-${cat}`);
-      if (isNaN(mass) || isNaN(mult)) {
+
+    categorySelect.addEventListener("change", updatePlants);
+    window.addEventListener("DOMContentLoaded", updatePlants);
+
+    function calculateUnified() {
+      const category = categorySelect.value;
+      const plant = plantSelect.value;
+      const mass = parseFloat(document.getElementById("mass").value);
+      const multiplier = parseFloat(document.getElementById("multiplier").value);
+      const resultEl = document.getElementById("result");
+
+      if (isNaN(mass) || isNaN(multiplier)) {
         resultEl.textContent = '⚠️ Please enter valid numbers.';
         return;
       }
-      // Insert your formula logic here based on `plant` and `mass`, `mult`
-      const price = Math.floor(1 * mass * mass * mult); // Placeholder
+
+      const price = Math.floor(1 * mass * mass * multiplier); // Placeholder formula
       resultEl.textContent = `💰 Estimated Price for ${plant}: ₵${price.toLocaleString()}`;
     }
   </script>
