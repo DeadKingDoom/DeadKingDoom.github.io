@@ -1,6 +1,6 @@
-body {
+html, body {
       font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(#d4f7e5, #ffffff);
+      background-color: rgb(60, 60, 60);
       padding: 2rem;
       margin: 0;
       display: flex;
