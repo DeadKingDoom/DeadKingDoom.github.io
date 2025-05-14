@@ -1,3 +1,55 @@
-<html>
-  
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Grow a Garden Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f3f6fa;
+      padding: 2rem;
+      max-width: 500px;
+      margin: auto;
+      text-align: center;
+    }
+    input, button {
+      padding: 0.5rem;
+      font-size: 1rem;
+      margin: 0.5rem;
+      width: 80%;
+    }
+    .result {
+      margin-top: 1rem;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>🌱 Grow a Garden Price Calculator</h1>
+  <p>Enter your plant's weight and mutation multiplier:</p>
+
+  <input type="number" id="mass" placeholder="Mass (kg)" step="0.01" />
+  <input type="number" id="multiplier" placeholder="Multiplier (e.g. 2200)" value="2200" />
+  <button onclick="calculate()">Calculate</button>
+
+  <div class="result" id="result"></div>
+
+  <script>
+    function calculate() {
+      const mass = parseFloat(document.getElementById('mass').value);
+      const multiplier = parseInt(document.getElementById('multiplier').value);
+      const base = 241.51;
+
+      if (isNaN(mass) || isNaN(multiplier)) {
+        document.getElementById('result').innerText = 'Please enter valid numbers.';
+        return;
+      }
+
+      const price = Math.floor(base * mass * mass * multiplier);
+      document.getElementById('result').innerText = `💰 Estimated Price: ₵${price.toLocaleString()}`;
+    }
+  </script>
+</body>
 </html>
