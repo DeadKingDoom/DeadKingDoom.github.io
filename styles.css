@@ -1,66 +1,131 @@
-html, body {
-  font-family: 'Segoe UI', sans-serif;
-  background-color: rgb(60, 60, 60);
-  padding: 2rem;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
+    html, body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: rgb(60, 60, 60);
+      padding: 2rem;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
 
-h1 {
-  margin-bottom: 0.5rem;
-  font-size: 2rem;
-  color: #fff;
-  text-align: center;
-}
+    h1 {
+      margin-bottom: 1rem;
+      font-size: 2rem;
+      color: #fff;
+    }
 
-.central-container {
-  background: #fff;
-  padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 500px;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  gap: 1rem;
-}
+    .central-container {
+      background: #fff;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 500px;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
 
-label {
-  margin-bottom: 0.25rem;
-  color: #333;
-  font-weight: bold;
-}
+    label {
+      font-weight: bold;
+      color: #333;
+    }
 
-input, button, select {
-  width: 100%;
-  padding: 0.75rem;
-  font-size: 1rem;
-  margin-bottom: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  box-sizing: border-box;
-}
+    input, select, button {
+      width: 100%;
+      padding: 0.75rem;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      margin-bottom: 0.5rem;
+    }
 
-button.calc {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
+    button.calc {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
 
-button.calc:hover {
-  background-color: #0069d9;
-}
+    button.calc:hover {
+      background-color: #0069d9;
+    }
 
-.result {
-  font-size: 1.2rem;
-  font-weight: bold;
-  text-align: center;
-  margin-top: 1rem;
-  color: #2c3e50;
-}
+    .result {
+      font-size: 1.2rem;
+      font-weight: bold;
+      text-align: center;
+      margin-top: 1rem;
+      color: #2c3e50;
+    }
+
+    .mutations-wrapper {
+      width: 100%;
+      margin-bottom: 1rem;
+      position: relative;
+    }
+
+    #mutation-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 0.5rem;
+      background: #fff;
+      position: relative;
+    }
+
+    #mutation-search {
+      border: none;
+      outline: none;
+      flex: 1;
+      min-width: 150px;
+      padding: 0.5rem;
+      font-size: 1rem;
+    }
+
+    .suggestions {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: white;
+      border: 1px solid #ccc;
+      border-top: none;
+      z-index: 10;
+      max-height: 150px;
+      overflow-y: auto;
+      display: none;
+    }
+
+    .suggestions div {
+      padding: 0.5rem;
+      cursor: pointer;
+    }
+
+    .suggestions div:hover {
+      background-color: #f0f0f0;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .chip {
+      background-color: #e0e0e0;
+      padding: 0.5rem 1rem;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .variant-select {
+      margin-top: 0.5rem;
+    }
