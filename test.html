@@ -1,73 +1,197 @@
-<label for="plant">Select Plant:</label>
-<select id="plant">
-  <!-- Public Crops -->
-  <optgroup label="Public Crops">
-    <option value="Carrot">Carrot</option>
-    <option value="Strawberry">Strawberry</option>
-    <option value="Blueberry">Blueberry</option>
-    <option value="Orange Tulip">Orange Tulip</option>
-    <option value="Tomato">Tomato</option>
-    <option value="Corn">Corn</option>
-    <option value="Daffodil">Daffodil</option>
-    <option value="Watermelon">Watermelon</option>
-    <option value="Pumpkin">Pumpkin</option>
-    <option value="Apple">Apple</option>
-    <option value="Bamboo">Bamboo</option>
-    <option value="Coconut">Coconut</option>
-    <option value="Cactus">Cactus</option>
-    <option value="Dragon Fruit">Dragon Fruit</option>
-    <option value="Mango">Mango</option>
-    <option value="Grape">Grape</option>
-    <option value="Mushroom">Mushroom</option>
-    <option value="Pepper">Pepper</option>
-    <option value="Cacao">Cacao</option>
-  </optgroup>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Grow a Garden Calculator</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(#d4f7e5, #ffffff);
+      padding: 2rem;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
 
-  <!-- Normal Seed Pack -->
-  <optgroup label="Normal Seed Pack">
-    <option value="Lemon">Lemon</option>
-    <option value="Pineapple">Pineapple</option>
-    <option value="Peach">Peach</option>
-    <option value="Raspberry">Raspberry</option>
-    <option value="Pear">Pear</option>
-  </optgroup>
+    h1 {
+      margin-bottom: 0.5rem;
+      font-size: 2rem;
+      color: #333;
+    }
 
-  <!-- Premium Seed Pack -->
-  <optgroup label="Premium Seed Pack">
-    <option value="Raspberry Premium">Raspberry</option>
-    <option value="Cranberry">Cranberry</option>
-    <option value="Durian">Durian</option>
-    <option value="Eggplant">Eggplant</option>
-    <option value="Venus Flytrap">Venus Flytrap</option>
-    <option value="Lotus">Lotus</option>
-  </optgroup>
+    .categories {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
 
-  <!-- Exotic Seed Pack -->
-  <optgroup label="Exotic Seed Pack">
-    <option value="Papaya">Papaya</option>
-    <option value="Banana">Banana</option>
-    <option value="Passionfruit">Passionfruit</option>
-    <option value="Soul Fruit">Soul Fruit</option>
-    <option value="Cursed Fruit">Cursed Fruit</option>
-  </optgroup>
+    .categories button {
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      background-color: #28a745;
+      color: white;
+      transition: background-color 0.2s;
+    }
+    .categories button:hover {
+      background-color: #218838;
+    }
 
-  <!-- Easter Event -->
-  <optgroup label="Easter Event">
-    <option value="Chocolate Carrot">Chocolate Carrot</option>
-    <option value="Candy Sunflower">Candy Sunflower</option>
-    <option value="Easter Egg">Easter Egg</option>
-    <option value="Red Lollipop">Red Lollipop</option>
-    <option value="Candy Blossom">Candy Blossom</option>
-  </optgroup>
+    .calculator, .subpage {
+      background: #fff;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 400px;
+      display: none;
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .calculator.active, .subpage.active {
+      display: flex;
+    }
 
-  <!-- Lunar Glow Event -->
-  <optgroup label="Lunar Glow Event">
-    <option value="Nightshade">Nightshade</option>
-    <option value="Glowshroom">Glowshroom</option>
-    <option value="Mint">Mint</option>
-    <option value="Moonflower">Moonflower</option>
-    <option value="Starfruit">Starfruit</option>
-    <option value="Moonglow">Moonglow</option>
-    <option value="Moon Blossom">Moon Blossom</option>
-  </optgroup>
-</select>
+    label {
+      margin-bottom: 0.5rem;
+      color: #333;
+    }
+
+    input, button, select {
+      width: 100%;
+      padding: 0.75rem;
+      font-size: 1rem;
+      margin-bottom: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+
+    button.calc {
+      background-color: #007bff;
+      color: white;
+    }
+    button.calc:hover {
+      background-color: #0069d9;
+    }
+
+    .result {
+      font-size: 1.2rem;
+      font-weight: bold;
+      text-align: center;
+      margin-top: 1rem;
+      color: #2c3e50;
+    }
+
+    .back-btn {
+      background: none;
+      color: #555;
+      border: none;
+      margin-bottom: 1rem;
+      text-align: left;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>🌱 Grow a Garden Calculator</h1>
+  <p>Select a category to begin:</p>
+
+  <div class="categories">
+    <button onclick="openCategory('public')">Public Crops</button>
+    <button onclick="openCategory('normal')">Normal Seed Pack</button>
+    <button onclick="openCategory('premium')">Premium Seed Pack</button>
+    <button onclick="openCategory('exotic')">Exotic Seed Pack</button>
+    <button onclick="openCategory('easter')">Easter Event</button>
+    <button onclick="openCategory('lunar')">Lunar Glow Event</button>
+  </div>
+
+  <!-- Subpage templates -->
+  <div id="public" class="subpage">
+    <button class="back-btn" onclick="goHome()">← Back to categories</button>
+    <h2>Public Crops</h2>
+    <select id="plant-public">
+      <option>Carrot</option><option>Strawberry</option><option>Blueberry</option>
+      <option>Orange Tulip</option><option>Tomato</option><option>Corn</option>
+      <option>Daffodil</option><option>Watermelon</option><option>Pumpkin</option>
+      <option>Apple</option><option>Bamboo</option><option>Coconut</option>
+      <option>Cactus</option><option>Dragon Fruit</option><option>Mango</option>
+      <option>Grape</option><option>Mushroom</option><option>Pepper</option>
+      <option>Cacao</option>
+    </select>
+    <label for="mass-public">Mass (kg)</label>
+    <input type="number" id="mass-public" step="0.01" placeholder="e.g. 24.02">
+    <label for="multiplier-public">Mutation Multiplier</label>
+    <input type="number" id="multiplier-public" value="2200">
+    <button class="calc" onclick="calculate('public')">Calculate</button>
+    <div class="result" id="result-public"></div>
+  </div>
+
+  <!-- Repeat subpage for each category -->
+  <div id="normal" class="subpage">
+    <button class="back-btn" onclick="goHome()">← Back to categories</button>
+    <h2>Normal Seed Pack</h2>
+    <select id="plant-normal">
+      <option>Lemon</option><option>Pineapple</option><option>Peach</option>
+      <option>Raspberry</option><option>Pear</option>
+    </select>
+    <label for="mass-normal">Mass (kg)</label>
+    <input type="number" id="mass-normal" step="0.01" placeholder="e.g. 24.02">
+    <label for="multiplier-normal">Mutation Multiplier</label>
+    <input type="number" id="multiplier-normal" value="2200">
+    <button class="calc" onclick="calculate('normal')">Calculate</button>
+    <div class="result" id="result-normal"></div>
+  </div>
+
+  <div id="premium" class="subpage">
+    <button class="back-btn" onclick="goHome()">← Back to categories</button>
+    <h2>Premium Seed Pack</h2>
+    <select id="plant-premium">
+      <option>Raspberry</option><option>Cranberry</option><option>Durian</option>
+      <option>Eggplant</option><option>Venus Flytrap</option><option>Lotus</option>
+    </select>
+    <label for="mass-premium">Mass (kg)</label>
+    <input type="number" id="mass-premium" step="0.01" placeholder="e.g. 24.02">
+    <label for="multiplier-premium">Mutation Multiplier</label>
+    <input type="number" id="multiplier-premium" value="2200">
+    <button class="calc" onclick="calculate('premium')">Calculate</button>
+    <div class="result" id="result-premium"></div>
+  </div>
+
+  <div id="exotic" class="subpage">
+    <button class="back-btn" onclick="goHome()">← Back to categories</button>
+    <h2>Exotic Seed Pack</h2>
+    <select id="plant-exotic">
+      <option>Papaya</option><option>Banana</option><option>Passionfruit</option>
+      <option>Soul Fruit</option><option>Cursed Fruit</option>
+    </select>
+    <label for="mass-exotic">Mass (kg)</label>
+    <input type="number" id="mass-exotic" step="0.01" placeholder="e.g. 24.02">
+    <label for="multiplier-exotic">Mutation Multiplier</label>
+    <input type="number" id="multiplier-exotic" value="2200">
+    <button class="calc" onclick="calculate('exotic')">Calculate</button>
+    <div class="result" id="result-exotic"></div>
+  </div>
+
+  <div id="easter" class="subpage">
+    <button class="back-btn" onclick="goHome()">← Back to categories</button>
+    <h2>Easter Event</h2>
+    <select id="plant-easter">
+      <option>Chocolate Carrot</option><option>Candy Sunflower</option>
+      <option>Easter Egg</option><option>Red Lollipop</option><option>Candy Blossom</option>
+    </select>
+    <label for="mass-easter">Mass (kg)</label>
+    <input type="number" id="mass-easter" step="0.01" placeholder="e.g. 24.02">
+    <label for="multiplier-easter">Mutation Multiplier</label>
+    <input type="number" id="multiplier-easter" value="2200">
+    <button class="calc" onclick="calculate('easter')">Calculate</button>
+    <div class="result" id="result-easter"></div>
+  </div>
+
+  <div id="lunar" class="subpage">
+    <button class="back-btn" onclick="goHome()">← Back to categories</button>
+    <h2>Lunar Glow Event</n
