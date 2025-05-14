@@ -1,315 +1,305 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Grow a Garden Calculator</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-    }
-    .container {
-      display: flex;
-      height: 100vh;
-      position: relative;
-    }
-    /* Sidebar */
-    .sidebar {
-      width: 250px;
-      background-color: #2e6b50;
-      color: #fff;
-      padding: 20px;
-      box-sizing: border-box;
-    }
-    .sidebar h2 {
-      margin-top: 0;
-    }
-    .sidebar button {
-      display: block;
-      margin: 10px 0;
-      width: 100%;
-      padding: 10px;
-      background: #387c63;
-      border: none;
-      color: #fff;
-      cursor: pointer;
-      text-align: left;
-      border-radius: 4px;
-      transition: background 0.2s;
-    }
-    .sidebar button:hover {
-      background: #45a078;
-    }
-    /* Panel sliding out */
-    .plant-panel {
-      width: 220px;
-      background-color: #f0f0f0;
-      padding: 20px;
-      box-sizing: border-box;
-      display: none;
-      position: absolute;
-      top: 0;
-      left: 250px;
-      height: 100vh;
-      border-left: 1px solid #ccc;
-      overflow-y: auto;
-    }
-    .plant-panel.active {
-      display: block;
-    }
-    .plant-panel h3 {
-      margin-top: 0;
-    }
-    .plant-panel label,
-    .plant-panel select,
-    .plant-panel input,
-    .plant-panel button {
-      width: 100%;
-      margin-bottom: 10px;
-      font-size: 1rem;
-    }
-    .plant-panel select,
-    .plant-panel input {
-      padding: 8px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
-    .plant-panel button {
-      padding: 10px;
-      background: #28a745;
-      border: none;
-      color: #fff;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    .plant-panel button:hover {
-      background: #218838;
-    }
-    .plant-panel .back-btn {
-      background: none;
-      border: none;
-      color: #555;
-      margin-bottom: 10px;
-      text-align: left;
-      cursor: pointer;
-    }
-    .plant-panel .result {
-      font-weight: bold;
-      margin-top: 20px;
-      color: #333;
-    }
-    /* Main area */
-    .main {
-      flex: 1;
-      padding: 40px;
-      box-sizing: border-box;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      background: #f9f9f9;
-    }
-    .main h1 {
-      margin-bottom: 10px;
-    }
-    .main form {
-      max-width: 300px;
-      width: 100%;
-    }
-    .main label,
-    .main input,
-    .main button {
-      width: 100%;
-      margin-bottom: 10px;
-      font-size: 1rem;
-    }
-    .main input {
-      padding: 8px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
-    .main button {
-      padding: 10px;
-      background: #007bff;
-      border: none;
-      color: #fff;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    .main button:hover {
-      background: #0069d9;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <title>Grow a Garden Calculator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* General Styles */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f9f9f9;
+            color: #333;
+        }
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+        /* Sidebar */
+        .sidebar {
+            background: #14663A;
+            color: white;
+            padding: 20px;
+            width: 250px;
+            box-sizing: border-box;
+        }
+        .sidebar h2 {
+            margin-top: 0;
+            font-size: 1.5em;
+        }
+        .sidebar label {
+            display: block;
+            margin: 15px 0 5px;
+        }
+        .sidebar input[type="number"],
+        .sidebar select {
+            width: 100%;
+            padding: 6px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .sidebar input[type="range"] {
+            width: 100%;
+        }
+        .sidebar button {
+            margin-top: 20px;
+            background: #2E8B57;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            font-size: 1em;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .sidebar button:hover {
+            background: #256644;
+        }
+        /* Main content */
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        /* Hero banner */
+        .hero {
+            background: #D4F8D4;
+            border: 1px solid #c4e3c4;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .hero h1 {
+            margin-top: 0;
+            color: #1a472a;
+        }
+        .hero p {
+            margin: 10px 0;
+            line-height: 1.5;
+        }
+        /* Calculator results panel */
+        .calculator-panel {
+            background: #fff;
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .calculator-panel h2 {
+            margin-top: 0;
+        }
+        /* Quick tips and FAQs grid */
+        .tips-grid {
+            margin-bottom: 20px;
+        }
+        .tips-grid h2 {
+            margin-top: 0;
+        }
+        .grid-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .card {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 15px;
+            box-shadow: 1px 1px 3px rgba(0,0,0,0.05);
+        }
+        .card h3 {
+            margin-top: 0;
+            font-size: 1.1em;
+            color: #2a6b2a;
+        }
+        .card p {
+            margin: 8px 0;
+            line-height: 1.4;
+        }
+        /* Recent history */
+        .history {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .history h2 {
+            margin-top: 0;
+        }
+        .history ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        .history li {
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .history li:last-child {
+            border-bottom: none;
+        }
+        /* Stats table */
+        .stats {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .stats h2 {
+            margin-top: 0;
+        }
+        .stats table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .stats th, .stats td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+        .stats th {
+            background: #f0f0f0;
+        }
+        /* Footer */
+        footer {
+            background: #f0f0f0;
+            padding: 10px 20px;
+            text-align: center;
+        }
+        footer a {
+            color: #14663A;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <nav class="sidebar">
-      <h2>Categories</h2>
-      <button onclick="showPanel('public')">Public Crops</button>
-      <button onclick="showPanel('normal')">Normal Seed Pack</button>
-      <button onclick="showPanel('premium')">Premium Seed Pack</button>
-      <button onclick="showPanel('exotic')">Exotic Seed Pack</button>
-      <button onclick="showPanel('easter')">Easter Event</button>
-      <button onclick="showPanel('lunar')">Lunar Glow Event</button>
-    </nav>
-
-    <!-- Panels -->
-    <div id="public-panel" class="plant-panel">
-      <button class="back-btn" onclick="hidePanels()">← Back</button>
-      <h3>Public Crops</h3>
-      <select id="plant-public">
-        <option>Carrot</option>
-        <option>Strawberry</option>
-        <option>Blueberry</option>
-        <option>Orange Tulip</option>
-        <option>Tomato</option>
-        <option>Corn</option>
-        <option>Daffodil</option>
-        <option>Watermelon</option>
-        <option>Pumpkin</option>
-        <option>Apple</option>
-        <option>Bamboo</option>
-        <option>Coconut</option>
-        <option>Cactus</option>
-        <option>Dragon Fruit</option>
-        <option>Mango</option>
-        <option>Grape</option>
-        <option>Mushroom</option>
-        <option>Pepper</option>
-        <option>Cacao</option>
-      </select>
-      <label>Mass (kg)</label>
-      <input type="number" id="mass-public" step="0.01" placeholder="e.g. 24.02">
-      <label>Multiplier</label>
-      <input type="number" id="multiplier-public" value="2200">
-      <button onclick="calculate('public')">Calculate</button>
-      <div class="result" id="result-public"></div>
+    <div class="container">
+        <!-- Sidebar / Calculator input panel -->
+        <aside class="sidebar">
+            <h2>Grow a Garden Calculator</h2>
+            <label for="crop">Crop:</label>
+            <select id="crop" name="crop">
+                <option>Carrot</option>
+                <option>Tomato</option>
+                <option>Strawberry</option>
+                <option>Glowshroom</option>
+                <option>Moon Blossom</option>
+            </select>
+            <label for="quantity">Quantity (seeds):</label>
+            <input type="number" id="quantity" name="quantity" min="1" value="1">
+            <label for="multiplier">Yield Multiplier:</label>
+            <input type="range" id="multiplier" name="multiplier" min="0.5" max="2" step="0.1" value="1">
+            <button type="button">Calculate</button>
+        </aside>
+        <!-- Main content area -->
+        <main class="main-content">
+            <!-- Hero banner -->
+            <section class="hero">
+                <h1>Welcome to the Grow a Garden Calculator!</h1>
+                <p>Use this tool to plan your garden harvests. Select your crop and enter the quantity on the left, then click <strong>Calculate</strong>. Your expected yield and profit will appear below. Check the sections below for tips, FAQs, and base crop values to help you get the best results.</p>
+            </section>
+            <!-- Calculator results panel placeholder -->
+            <section class="calculator-panel">
+                <h2>Calculation Results</h2>
+                <p>Your results will appear here after you click the <strong>Calculate</strong> button.</p>
+            </section>
+            <!-- Quick Tips & FAQs -->
+            <section class="tips-grid">
+                <h2>Quick Tips & FAQs</h2>
+                <div class="grid-cards">
+                    <div class="card">
+                        <h3>Quick Tip: Monitor Growth Time</h3>
+                        <p>Ensure you enter the correct growth time for your crop. Accurate growth times lead to more precise yield and profit calculations.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Quick Tip: Use the Base Values Table</h3>
+                        <p>Refer to the crop base values table below for default sell prices and growth times. This helps verify your inputs and understand the calculations.</p>
+                    </div>
+                    <div class="card">
+                        <h3>FAQ: How does the history work?</h3>
+                        <p>The list below tracks your last five calculations. These are stored locally in your browser and update after each calculation. Clear your browser data to reset the history.</p>
+                    </div>
+                    <div class="card">
+                        <h3>FAQ: What is a yield multiplier?</h3>
+                        <p>The yield multiplier accounts for bonuses (like pets or events) that increase output. For example, a multiplier of 1.5 means a 50% increase in yield. Adjust this slider to match your current bonuses.</p>
+                    </div>
+                </div>
+            </section>
+            <!-- Recent Calculations History -->
+            <section class="history">
+                <h2>Recent Calculations</h2>
+                <ul>
+                    <li>10 Carrots (Multiplier 1.0): 100 Sheckles – 2025-05-10 14:23</li>
+                    <li>20 Tomatoes (Multiplier 1.2): 300 Sheckles – 2025-05-11 09:45</li>
+                    <li>5 Strawberries (Multiplier 1.0): 250 Sheckles – 2025-05-12 18:10</li>
+                    <li>2 Glowshrooms (Multiplier 1.5): 240 Sheckles – 2025-05-13 11:00</li>
+                    <li>15 Carrots (Multiplier 1.0): 150 Sheckles – 2025-05-14 16:05</li>
+                </ul>
+            </section>
+            <!-- Crop Base Value Stats Table -->
+            <section class="stats">
+                <h2>Crop Base Value Stats</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Crop</th>
+                            <th>Base Sell Price (Sheckles)</th>
+                            <th>Growth Time (hrs)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Carrot</td>
+                            <td>10</td>
+                            <td>1.0</td>
+                        </tr>
+                        <tr>
+                            <td>Tomato</td>
+                            <td>15</td>
+                            <td>1.5</td>
+                        </tr>
+                        <tr>
+                            <td>Strawberry</td>
+                            <td>20</td>
+                            <td>2.0</td>
+                        </tr>
+                        <tr>
+                            <td>Glowshroom</td>
+                            <td>60</td>
+                            <td>3.0</td>
+                        </tr>
+                        <tr>
+                            <td>Moon Blossom</td>
+                            <td>120</td>
+                            <td>6.0</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+        </main>
     </div>
-
-    <div id="normal-panel" class="plant-panel">
-      <button class="back-btn" onclick="hidePanels()">← Back</button>
-      <h3>Normal Seed Pack</h3>
-      <select id="plant-normal">
-        <option>Lemon</option>
-        <option>Pineapple</option>
-        <option>Peach</option>
-        <option>Raspberry</option>
-        <option>Pear</option>
-      </select>
-      <label>Mass (kg)</label>
-      <input type="number" id="mass-normal" step="0.01" placeholder="e.g. 24.02">
-      <label>Multiplier</label>
-      <input type="number" id="multiplier-normal" value="2200">
-      <button onclick="calculate('normal')">Calculate</button>
-      <div class="result" id="result-normal"></div>
-    </div>
-
-    <div id="premium-panel" class="plant-panel">
-      <button class="back-btn" onclick="hidePanels()">← Back</button>
-      <h3>Premium Seed Pack</h3>
-      <select id="plant-premium">
-        <option>Raspberry</option>
-        <option>Cranberry</option>
-        <option>Durian</option>
-        <option>Eggplant</option>
-        <option>Venus Flytrap</option>
-        <option>Lotus</option>
-      </select>
-      <label>Mass (kg)</label>
-      <input type="number" id="mass-premium" step="0.01" placeholder="e.g. 24.02">
-      <label>Multiplier</label>
-      <input type="number" id="multiplier-premium" value="2200">
-      <button onclick="calculate('premium')">Calculate</button>
-      <div class="result" id="result-premium"></div>
-    </div>
-
-    <div id="exotic-panel" class="plant-panel">
-      <button class="back-btn" onclick="hidePanels()">← Back</button>
-      <h3>Exotic Seed Pack</h3>
-      <select id="plant-exotic">
-        <option>Papaya</option>
-        <option>Banana</option>
-        <option>Passionfruit</option>
-        <option>Soul Fruit</option>
-        <option>Cursed Fruit</option>
-      </select>
-      <label>Mass (kg)</label>
-      <input type="number" id="mass-exotic" step="0.01" placeholder="e.g. 24.02">
-      <label>Multiplier</label>
-      <input type="number" id="multiplier-exotic" value="2200">
-      <button onclick="calculate('exotic')">Calculate</button>
-      <div class="result" id="result-exotic"></div>
-    </div>
-
-    <div id="easter-panel" class="plant-panel">
-      <button class="back-btn" onclick="hidePanels()">← Back</button>
-      <h3>Easter Event</h3>
-      <select id="plant-easter">
-        <option>Chocolate Carrot</option>
-        <option>Candy Sunflower</option>
-        <option>Easter Egg</option>
-        <option>Red Lollipop</option>
-        <option>Candy Blossom</option>
-      </select>
-      <label>Mass (kg)</label>
-      <input type="number" id="mass-easter" step="0.01" placeholder="e.g. 24.02">
-      <label>Multiplier</label>
-      <input type="number" id="multiplier-easter" value="2200">
-      <button onclick="calculate('easter')">Calculate</button>
-      <div class="result" id="result-easter"></div>
-    </div>
-
-    <div id="lunar-panel" class="plant-panel">
-      <button class="back-btn" onclick="hidePanels()">← Back</button>
-      <h3>Lunar Glow Event</h3>
-      <select id="plant-lunar">
-        <option>Nightshade</option>
-        <option>Glowshroom</option>
-        <option>Mint</option>
-        <option>Moonflower</option>
-        <option>Starfruit</option>
-        <option>Moonglow</option>
-        <option>Moon Blossom</option>
-      </select>
-      <label>Mass (kg)</label>
-      <input type="number" id="mass-lunar" step="0.01" placeholder="e.g. 24.02">
-      <label>Multiplier</label>
-      <input type="number" id="multiplier-lunar" value="2200">
-      <button onclick="calculate('lunar')">Calculate</button>
-      <div class="result" id="result-lunar"></div>
-    </div>
-
-    <div class="main">
-      <h1>🌱 Grow a Garden Calculator</h1>
-      <p>Select a category from the left to begin.</p>
-    </div>
-  </div>
-
-  <script>
-    function showPanel(cat) {
-      hidePanels();
-      document.getElementById(cat + '-panel').classList.add('active');
-    }
-    function hidePanels() {
-      document.querySelectorAll('.plant-panel').forEach(p => p.classList.remove('active'));
-    }
-    function calculate(cat) {
-      const mass = parseFloat(document.getElementById('mass-' + cat).value);
-      const mult = parseFloat(document.getElementById('multiplier-' + cat).value);
-      const plant = document.getElementById('plant-' + cat).value;
-      const resultEl = document.getElementById('result-' + cat);
-      if (isNaN(mass) || isNaN(mult)) {
-        resultEl.textContent = '⚠️ Please enter valid numbers.';
-        return;
-      }
-      // Placeholder formula logic
-      const price = Math.floor(mass * mass * mult);
-      resultEl.textContent = `💰 ${plant}: ₵${price.toLocaleString()}`;
-    }
-  </script>
+    <!-- Footer with external links -->
+    <footer>
+        <p>
+            <a href="https://growagarden.fandom.com" target="_blank" rel="noopener">Grow a Garden Wiki</a> |
+            <a href="https://discord.com/invite/gwQvzBS3Ea" target="_blank" rel="noopener">Discord</a> |
+            <a href="https://github.com/gameboyso/grow-a-garden-roblox" target="_blank" rel="noopener">GitHub Source</a>
+        </p>
+    </footer>
 </body>
 </html>
