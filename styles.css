@@ -1,11 +1,93 @@
-#top-bar {
-  width:100vw;
-  height:100px;
-  background-color:green;
-}
+body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(#d4f7e5, #ffffff);
+      padding: 2rem;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
 
-#button1 {
-    width:100px;
-    height:100px;
-    color:yellow;
-}
+    h1 {
+      margin-bottom: 0.5rem;
+      font-size: 2rem;
+      color: #333;
+    }
+
+    .categories {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .categories button {
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      background-color: #28a745;
+      color: white;
+      transition: background-color 0.2s;
+    }
+
+    .categories button:hover {
+      background-color: #218838;
+    }
+
+    .subpage {
+      background: #fff;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 400px;
+      display: none;
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .subpage.active {
+      display: flex;
+    }
+
+    label {
+      margin-bottom: 0.5rem;
+      color: #333;
+    }
+
+    input, button, select {
+      width: 100%;
+      padding: 0.75rem;
+      font-size: 1rem;
+      margin-bottom: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+
+    button.calc {
+      background-color: #007bff;
+      color: white;
+    }
+
+    button.calc:hover {
+      background-color: #0069d9;
+    }
+
+    .result {
+      font-size: 1.2rem;
+      font-weight: bold;
+      text-align: center;
+      margin-top: 1rem;
+      color: #2c3e50;
+    }
+
+    .back-btn {
+      background: none;
+      color: #555;
+      border: none;
+      margin-bottom: 1rem;
+      text-align: left;
+      cursor: pointer;
+    }
