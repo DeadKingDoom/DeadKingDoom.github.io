@@ -9,112 +9,113 @@
 <body>
   <h1>🌱 Grow a Garden Calculator</h1>
   <p>Select a category to begin:</p>
-
-  <div class="categories">
-    <button onclick="openCategory('public')">Public Crops</button>
-    <button onclick="openCategory('normal')">Normal Seed Pack</button>
-    <button onclick="openCategory('premium')">Premium Seed Pack</button>
-    <button onclick="openCategory('exotic')">Exotic Seed Pack</button>
-    <button onclick="openCategory('easter')">Easter Event</button>
-    <button onclick="openCategory('lunar')">Lunar Glow Event</button>
-  </div>
-
-  <!-- Subpage templates -->
-  <div id="public" class="subpage">
-    <button class="back-btn" onclick="goHome()">← Back to categories</button>
-    <h2>Public Crops</h2>
-    <select id="plant-public">
-      <option>Carrot</option><option>Strawberry</option><option>Blueberry</option>
-      <option>Orange Tulip</option><option>Tomato</option><option>Corn</option>
-      <option>Daffodil</option><option>Watermelon</option><option>Pumpkin</option>
-      <option>Apple</option><option>Bamboo</option><option>Coconut</option>
-      <option>Cactus</option><option>Dragon Fruit</option><option>Mango</option>
-      <option>Grape</option><option>Mushroom</option><option>Pepper</option>
-      <option>Cacao</option>
-    </select>
-    <label for="mass-public">Mass (kg)</label>
-    <input type="number" id="mass-public" step="0.01" placeholder="e.g. 24.02">
-    <label for="multiplier-public">Mutation Multiplier</label>
-    <input type="number" id="multiplier-public" value="2200">
-    <button class="calc" onclick="calculate('public')">Calculate</button>
-    <div class="result" id="result-public"></div>
-  </div>
-
-  <!-- Repeat for other categories -->
-  <div id="normal" class="subpage">
-    <button class="back-btn" onclick="goHome()">← Back to categories</button>
-    <h2>Normal Seed Pack</h2>
-    <select id="plant-normal">
-      <option>Lemon</option><option>Pineapple</option><option>Peach</option>
-      <option>Raspberry</option><option>Pear</option>
-    </select>
-    <label for="mass-normal">Mass (kg)</label>
-    <input type="number" id="mass-normal" step="0.01" placeholder="e.g. 24.02">
-    <label for="multiplier-normal">Mutation Multiplier</label>
-    <input type="number" id="multiplier-normal" value="2200">
-    <button class="calc" onclick="calculate('normal')">Calculate</button>
-    <div class="result" id="result-normal"></div>
-  </div>
-
-  <div id="premium" class="subpage">
-    <button class="back-btn" onclick="goHome()">← Back to categories</button>
-    <h2>Premium Seed Pack</h2>
-    <select id="plant-premium">
-      <option>Raspberry</option><option>Cranberry</option><option>Durian</option>
-      <option>Eggplant</option><option>Venus Flytrap</option><option>Lotus</option>
-    </select>
-    <label for="mass-premium">Mass (kg)</label>
-    <input type="number" id="mass-premium" step="0.01" placeholder="e.g. 24.02">
-    <label for="multiplier-premium">Mutation Multiplier</label>
-    <input type="number" id="multiplier-premium" value="2200">
-    <button class="calc" onclick="calculate('premium')">Calculate</button>
-    <div class="result" id="result-premium"></div>
-  </div>
-
-  <div id="exotic" class="subpage">
-    <button class="back-btn" onclick="goHome()">← Back to categories</button>
-    <h2>Exotic Seed Pack</h2>
-    <select id="plant-exotic">
-      <option>Papaya</option><option>Banana</option><option>Passionfruit</option>
-      <option>Soul Fruit</option><option>Cursed Fruit</option>
-    </select>
-    <label for="mass-exotic">Mass (kg)</label>
-    <input type="number" id="mass-exotic" step="0.01" placeholder="e.g. 24.02">
-    <label for="multiplier-exotic">Mutation Multiplier</label>
-    <input type="number" id="multiplier-exotic" value="2200">
-    <button class="calc" onclick="calculate('exotic')">Calculate</button>
-    <div class="result" id="result-exotic"></div>
-  </div>
-
-  <div id="easter" class="subpage">
-    <button class="back-btn" onclick="goHome()">← Back to categories</button>
-    <h2>Easter Event</h2>
-    <select id="plant-easter">
-      <option>Chocolate Carrot</option><option>Candy Sunflower</option>
-      <option>Easter Egg</option><option>Red Lollipop</option><option>Candy Blossom</option>
-    </select>
-    <label for="mass-easter">Mass (kg)</label>
-    <input type="number" id="mass-easter" step="0.01" placeholder="e.g. 24.02">
-    <label for="multiplier-easter">Mutation Multiplier</label>
-    <input type="number" id="multiplier-easter" value="2200">
-    <button class="calc" onclick="calculate('easter')">Calculate</button>
-    <div class="result" id="result-easter"></div>
-  </div>
-
-  <div id="lunar" class="subpage">
-    <button class="back-btn" onclick="goHome()">← Back to categories</button>
-    <h2>Lunar Glow Event</h2>
-    <select id="plant-lunar">
-      <option>Nightshade</option><option>Glowshroom</option><option>Mint</option>
-      <option>Moonflower</option><option>Starfruit</option><option>Moonglow</option>
-      <option>Moon Blossom</option>
-    </select>
-    <label for="mass-lunar">Mass (kg)</label>
-    <input type="number" id="mass-lunar" step="0.01" placeholder="e.g. 24.02">
-    <label for="multiplier-lunar">Mutation Multiplier</label>
-    <input type="number" id="multiplier-lunar" value="2200">
-    <button class="calc" onclick="calculate('lunar')">Calculate</button>
-    <div class="result" id="result-lunar"></div>
+<div id="page">
+    <div class="categories">
+      <button onclick="openCategory('public')">Public Crops</button>
+      <button onclick="openCategory('normal')">Normal Seed Pack</button>
+      <button onclick="openCategory('premium')">Premium Seed Pack</button>
+      <button onclick="openCategory('exotic')">Exotic Seed Pack</button>
+      <button onclick="openCategory('easter')">Easter Event</button>
+      <button onclick="openCategory('lunar')">Lunar Glow Event</button>
+    </div>
+  
+    <!-- Subpage templates -->
+    <div id="public" class="subpage">
+      <button class="back-btn" onclick="goHome()">← Back to categories</button>
+      <h2>Public Crops</h2>
+      <select id="plant-public">
+        <option>Carrot</option><option>Strawberry</option><option>Blueberry</option>
+        <option>Orange Tulip</option><option>Tomato</option><option>Corn</option>
+        <option>Daffodil</option><option>Watermelon</option><option>Pumpkin</option>
+        <option>Apple</option><option>Bamboo</option><option>Coconut</option>
+        <option>Cactus</option><option>Dragon Fruit</option><option>Mango</option>
+        <option>Grape</option><option>Mushroom</option><option>Pepper</option>
+        <option>Cacao</option>
+      </select>
+      <label for="mass-public">Mass (kg)</label>
+      <input type="number" id="mass-public" step="0.01" placeholder="e.g. 24.02">
+      <label for="multiplier-public">Mutation Multiplier</label>
+      <input type="number" id="multiplier-public" value="2200">
+      <button class="calc" onclick="calculate('public')">Calculate</button>
+      <div class="result" id="result-public"></div>
+    </div>
+  
+    <!-- Repeat for other categories -->
+    <div id="normal" class="subpage">
+      <button class="back-btn" onclick="goHome()">← Back to categories</button>
+      <h2>Normal Seed Pack</h2>
+      <select id="plant-normal">
+        <option>Lemon</option><option>Pineapple</option><option>Peach</option>
+        <option>Raspberry</option><option>Pear</option>
+      </select>
+      <label for="mass-normal">Mass (kg)</label>
+      <input type="number" id="mass-normal" step="0.01" placeholder="e.g. 24.02">
+      <label for="multiplier-normal">Mutation Multiplier</label>
+      <input type="number" id="multiplier-normal" value="2200">
+      <button class="calc" onclick="calculate('normal')">Calculate</button>
+      <div class="result" id="result-normal"></div>
+    </div>
+  
+    <div id="premium" class="subpage">
+      <button class="back-btn" onclick="goHome()">← Back to categories</button>
+      <h2>Premium Seed Pack</h2>
+      <select id="plant-premium">
+        <option>Raspberry</option><option>Cranberry</option><option>Durian</option>
+        <option>Eggplant</option><option>Venus Flytrap</option><option>Lotus</option>
+      </select>
+      <label for="mass-premium">Mass (kg)</label>
+      <input type="number" id="mass-premium" step="0.01" placeholder="e.g. 24.02">
+      <label for="multiplier-premium">Mutation Multiplier</label>
+      <input type="number" id="multiplier-premium" value="2200">
+      <button class="calc" onclick="calculate('premium')">Calculate</button>
+      <div class="result" id="result-premium"></div>
+    </div>
+  
+    <div id="exotic" class="subpage">
+      <button class="back-btn" onclick="goHome()">← Back to categories</button>
+      <h2>Exotic Seed Pack</h2>
+      <select id="plant-exotic">
+        <option>Papaya</option><option>Banana</option><option>Passionfruit</option>
+        <option>Soul Fruit</option><option>Cursed Fruit</option>
+      </select>
+      <label for="mass-exotic">Mass (kg)</label>
+      <input type="number" id="mass-exotic" step="0.01" placeholder="e.g. 24.02">
+      <label for="multiplier-exotic">Mutation Multiplier</label>
+      <input type="number" id="multiplier-exotic" value="2200">
+      <button class="calc" onclick="calculate('exotic')">Calculate</button>
+      <div class="result" id="result-exotic"></div>
+    </div>
+  
+    <div id="easter" class="subpage">
+      <button class="back-btn" onclick="goHome()">← Back to categories</button>
+      <h2>Easter Event</h2>
+      <select id="plant-easter">
+        <option>Chocolate Carrot</option><option>Candy Sunflower</option>
+        <option>Easter Egg</option><option>Red Lollipop</option><option>Candy Blossom</option>
+      </select>
+      <label for="mass-easter">Mass (kg)</label>
+      <input type="number" id="mass-easter" step="0.01" placeholder="e.g. 24.02">
+      <label for="multiplier-easter">Mutation Multiplier</label>
+      <input type="number" id="multiplier-easter" value="2200">
+      <button class="calc" onclick="calculate('easter')">Calculate</button>
+      <div class="result" id="result-easter"></div>
+    </div>
+  
+    <div id="lunar" class="subpage">
+      <button class="back-btn" onclick="goHome()">← Back to categories</button>
+      <h2>Lunar Glow Event</h2>
+      <select id="plant-lunar">
+        <option>Nightshade</option><option>Glowshroom</option><option>Mint</option>
+        <option>Moonflower</option><option>Starfruit</option><option>Moonglow</option>
+        <option>Moon Blossom</option>
+      </select>
+      <label for="mass-lunar">Mass (kg)</label>
+      <input type="number" id="mass-lunar" step="0.01" placeholder="e.g. 24.02">
+      <label for="multiplier-lunar">Mutation Multiplier</label>
+      <input type="number" id="multiplier-lunar" value="2200">
+      <button class="calc" onclick="calculate('lunar')">Calculate</button>
+      <div class="result" id="result-lunar"></div>
+    </div>
   </div>
 
   <!-- JavaScript -->
