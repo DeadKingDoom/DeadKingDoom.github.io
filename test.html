@@ -1,33 +1,36 @@
 <style>
-  body { font-family:Inter,sans-serif; margin:0; padding:2rem; background:#f8f9fa;}
-  .cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:1.5rem; }
-  .card { background:#fff; padding:1rem; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,.1); text-align:center; }
-  .card button { margin-top:1rem; background:#40916c;color:#fff;padding:.5rem 1rem;border:none;border-radius:6px;cursor:pointer; }
-  .modal-bg { position:fixed; top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.5); display:none;align-items:center;justify-content:center;}
-  .modal { background:#fff;padding:2rem;border-radius:8px;max-width:400px;width:90%; }
-  .modal.active { display:flex;}
-  .modal .close { float:right;cursor:pointer;color:#555;margin:-1rem -1rem 1rem 0;font-size:1.2rem; }
+  body { margin:0; display:flex; font-family:Inter,sans-serif; height:100vh;}
+  .sidebar { width:200px; background:#212529;color:#fff; display:flex;flex-direction:column;}
+  .sidebar button { background:none;border:none;color:inherit;padding:1rem;text-align:left;cursor:pointer;transition:background .2s;}
+  .sidebar button:hover, .sidebar button.active { background:#343a40;}
+  .main { flex:1; padding:2rem; overflow:auto;}
+  .pane { display:none;}
+  .pane.active { display:block;}
 </style>
 
-<div class="cards">
-  <div class="card"><h3>Public Crops</h3><button onclick="showModal('public')">Calculate</button></div>
-  <div class="card"><h3>Normal Seed Pack</h3><button onclick="showModal('normal')">Calculate</button></div>
-  <!-- other cards... -->
+<div class="sidebar">
+  <button onclick="swap('public')">Public Crops</button>
+  <button onclick="swap('normal')">Normal Pack</button>
+  <button onclick="swap('premium')">Premium Pack</button>
+  <button onclick="swap('exotic')">Exotic Pack</button>
+  <button onclick="swap('easter')">Easter Event</button>
+  <button onclick="swap('lunar')">Lunar Glow</button>
 </div>
-
-<div id="modal-bg" class="modal-bg" onclick="hideModal()">
-  <div class="modal" onclick="event.stopPropagation()">
-    <span class="close" onclick="hideModal()">×</span>
-    <div id="modal-content"></div>
-  </div>
+<div class="main">
+  <div id="public" class="pane"></div>
+  <div id="normal" class="pane"></div>
+  <div id="premium" class="pane"></div>
+  <div id="exotic" class="pane"></div>
+  <div id="easter" class="pane"></div>
+  <div id="lunar" class="pane"></div>
 </div>
 
 <script>
-  function showModal(cat) {
-    document.getElementById('modal-content').innerHTML = document.getElementById(cat).innerHTML;
-    document.getElementById('modal-bg').classList.add('active');
-  }
-  function hideModal() {
-    document.getElementById('modal-bg').classList.remove('active');
+  function swap(cat) {
+    document.querySelectorAll('.pane').forEach(p=>p.classList.remove('active'));
+    document.querySelectorAll('.sidebar button').forEach(b=>b.classList.remove('active'));
+    document.getElementById(cat).classList.add('active');
+    event.target.classList.add('active');
+    document.getElementById(cat).innerHTML = document.getElementById(cat+'-template').innerHTML;
   }
 </script>
