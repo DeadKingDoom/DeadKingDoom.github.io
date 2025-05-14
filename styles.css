@@ -8,20 +8,20 @@ body {
       align-items: center;
     }
 
-    h1 {
+h1 {
       margin-bottom: 0.5rem;
       font-size: 2rem;
       color: #333;
-    }
+}
 
-    .categories {
+.categories {
       display: flex;
       flex-wrap: wrap;
       gap: 1rem;
       margin-bottom: 2rem;
-    }
+}
 
-    .categories button {
+.categories button {
       padding: 0.75rem 1.5rem;
       font-size: 1rem;
       border: none;
@@ -30,13 +30,13 @@ body {
       background-color: #28a745;
       color: white;
       transition: background-color 0.2s;
-    }
+}
 
-    .categories button:hover {
+.categories button:hover {
       background-color: #218838;
-    }
+}
 
-    .subpage {
+.subpage {
       background: #fff;
       padding: 2rem;
       border-radius: 12px;
@@ -46,48 +46,48 @@ body {
       display: none;
       flex-direction: column;
       align-items: stretch;
-    }
+}
 
-    .subpage.active {
+.subpage.active {
       display: flex;
-    }
+}
 
-    label {
+label {
       margin-bottom: 0.5rem;
       color: #333;
-    }
+}
 
-    input, button, select {
+input, button, select {
       width: 100%;
       padding: 0.75rem;
       font-size: 1rem;
       margin-bottom: 1rem;
       border: 1px solid #ccc;
       border-radius: 8px;
-    }
+}
 
-    button.calc {
+button.calc {
       background-color: #007bff;
       color: white;
-    }
+}
 
-    button.calc:hover {
+button.calc:hover {
       background-color: #0069d9;
-    }
+}
 
-    .result {
+.result {
       font-size: 1.2rem;
       font-weight: bold;
       text-align: center;
       margin-top: 1rem;
       color: #2c3e50;
-    }
+}
 
-    .back-btn {
+.back-btn {
       background: none;
       color: #555;
       border: none;
       margin-bottom: 1rem;
       text-align: left;
       cursor: pointer;
-    }
+}
