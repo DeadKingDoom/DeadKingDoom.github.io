@@ -62,31 +62,48 @@
       color: #2c3e50;
     }
 
-    .mutations-wrapper {
-      width: 100%;
-      margin-bottom: 1rem;
-      position: relative;
-    }
-
     #mutation-container {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      padding: 0.5rem;
-      background: #fff;
-      position: relative;
-    }
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center; /* Vertically center contents */
+  gap: 0.4rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 0.4rem 0.5rem; /* Slightly reduced padding */
+  background: #fff;
+  min-height: 48px; /* Match typical input height */
+}
 
-    #mutation-search {
-      border: none;
-      outline: none;
-      flex: 1;
-      min-width: 150px;
-      padding: 0.5rem;
-      font-size: 1rem;
-    }
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  align-items: center;
+}
+
+.chip {
+  background-color: #e0e0e0;
+  padding: 0.25rem 0.6rem;  /* Smaller vertical padding */
+  border-radius: 999px;
+  font-size: 0.85rem;       /* Slightly smaller text */
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+#mutation-search {
+  border: none;
+  outline: none;
+  flex: 1;
+  min-width: 100px;
+  padding: 0.3rem 0.5rem;
+  font-size: 1rem;
+  line-height: 1.2;
+  margin: 0;
+}
+
 
     .suggestions {
       position: absolute;
@@ -109,23 +126,6 @@
 
     .suggestions div:hover {
       background-color: #f0f0f0;
-    }
-
-    .chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      align-items: center;
-    }
-
-    .chip {
-      background-color: #e0e0e0;
-      padding: 0.5rem 1rem;
-      border-radius: 999px;
-      display: inline-flex;
-      align-items: center;
-      cursor: pointer;
-      font-weight: bold;
     }
 
     .variant-select {
