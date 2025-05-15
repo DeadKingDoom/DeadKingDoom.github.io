@@ -104,6 +104,9 @@
   margin: 0;
 }
 
+.mutations-wrapper {
+  position: relative;
+}
 
     .suggestions {
       position: absolute;
