@@ -153,7 +153,7 @@
     }
     footer a:hover { text-decoration:underline; }
     
-   /* Mutation System - Corrected Styles */
+       /* Mutation System - Corrected Styles */
     .mutation-section {
       margin: 20px 0;
       padding: 15px;
@@ -212,7 +212,6 @@
     .current-multiplier {
       margin-top: 10px;
       font-weight: bold;
-    }
     .stats th:nth-child(2), .stats td:nth-child(2) {
       text-align: right;
     }
@@ -350,6 +349,9 @@
         "Starfruit": 190, "Moonglow": 200, "Moon Blossom": 250
       };
 
+      // Store calculation history persistently
+      const calculationHistory = JSON.parse(localStorage.getItem('gardenCalculations')) || [];
+
       // Build sidebar buttons - preserving existing content
       const sidebar = document.getElementById('sidebar');
       const existingContent = sidebar.innerHTML;
@@ -374,7 +376,7 @@
         statsBody.appendChild(tr);
       });
 
-      // Mutation system - Fixed to properly calculate from 0
+      // Mutation system
       const mutations = [
         { name: "Shocked", value: 99 },
         { name: "Chilled", value: 1 },
@@ -385,7 +387,7 @@
       ];
 
       let variantMultiplier = 1;
-      let baseMultiplier = 1; // Added base multiplier to fix the +1 issue
+      let baseMultiplier = 1;
 
       // Create mutation chips
       const mutationChips = document.getElementById('mutation-chips');
@@ -401,7 +403,7 @@
         mutationChips.appendChild(chip);
       });
 
-      // Corrected Variant Button Initialization
+       // Corrected Variant Button Initialization
       const variantButtons = document.querySelectorAll('.variant-btn');
       
       // First remove active class from all
@@ -423,7 +425,7 @@
           updateMultiplier();
         });
       });
-      // Fixed multiplier calculation
+      // Update multiplier display
       function updateMultiplier() {
         const activeChips = document.querySelectorAll('.mutation-chip.active');
         let mutationSum = 0;
@@ -432,12 +434,21 @@
           mutationSum += parseInt(chip.dataset.value);
         });
         
-        // Calculate total multiplier properly
-        const totalMultiplier = baseMultiplier + mutationSum; // Start from base 1
+        const totalMultiplier = baseMultiplier + mutationSum;
         const effectiveMultiplier = totalMultiplier * variantMultiplier;
         
         document.getElementById('active-multiplier').textContent = effectiveMultiplier;
         document.getElementById('multiplier').value = effectiveMultiplier;
+      }
+
+      // Update history display
+      function updateHistoryDisplay() {
+        const historyList = document.getElementById('history-list');
+        if (calculationHistory.length === 0) {
+          historyList.innerHTML = '<li>No calculations yet.</li>';
+        } else {
+          historyList.innerHTML = calculationHistory.map(h => `<li>${h}</li>`).join('');
+        }
       }
 
       // Category selection
@@ -448,7 +459,13 @@
         document.getElementById('plant-select').innerHTML =
           categories[catName].map(p => `<option>${p}</option>`).join('');
         document.getElementById('panel').classList.add('active');
-        hideCalcOutput();
+        
+        // Only clear the current calculation, not history
+        document.getElementById('calc-output').textContent = 'Your result will appear here.';
+        document.getElementById('result').textContent = '';
+        
+        // Keep displaying history
+        updateHistoryDisplay();
       }
       window.selectCategory = selectCategory;
 
@@ -458,8 +475,7 @@
       }
       window.hidePanel = hidePanel;
 
-      // Calculation & history
-      const history = [];
+      // Calculation
       function calculate() {
         const plant = document.getElementById('plant-select').value;
         const mass = parseFloat(document.getElementById('mass').value);
@@ -475,24 +491,26 @@
         
         const entry = `${plant} (${mass.toFixed(2)}kg × ${mult.toFixed(2)}) → ₵${price.toFixed(2)}`;
         document.getElementById('calc-output').textContent = entry;
-        
-        history.unshift(entry);
-        if (history.length > 5) history.pop();
-        document.getElementById('history-list').innerHTML =
-          history.map(h => `<li>${h}</li>`).join('');
         document.getElementById('result').textContent = entry;
+        
+        // Add to history and save
+        calculationHistory.unshift(entry);
+        if (calculationHistory.length > 5) calculationHistory.pop();
+        localStorage.setItem('gardenCalculations', JSON.stringify(calculationHistory));
+        
+        updateHistoryDisplay();
       }
       window.calculate = calculate;
 
       function hideCalcOutput(){
         document.getElementById('calc-output').textContent = 'Your result will appear here.';
-        document.getElementById('history-list').innerHTML = '<li>No calculations yet.</li>';
         document.getElementById('result').textContent = '';
       }
       window.hideCalcOutput = hideCalcOutput;
 
-      // Initialize multiplier display
+      // Initialize
       updateMultiplier();
+      updateHistoryDisplay();
     });
   </script>
 </body>
