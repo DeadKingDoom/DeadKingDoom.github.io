@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
@@ -153,7 +152,7 @@
     }
     footer a:hover { text-decoration:underline; }
     
-       /* Mutation System - Corrected Styles */
+    /* Mutation System */
     .mutation-section {
       margin: 20px 0;
       padding: 15px;
@@ -185,83 +184,80 @@
       color: white;
     }
 
-    /* Variant buttons styling - properly isolated */
-    .variant-selector {
+    /* Variant buttons styling */
+    .variant-buttons {
       display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
+      gap: 10px;
       margin: 10px 0;
     }
     
-    .variant-selector .variant-btn {
-      padding: 6px 12px;
-      background: #e0e0e0 !important; /* Force gray by default */
-      border-radius: 20px;
+    .variant-buttons button {
+      padding: 8px 12px;
+      background: #e0e0e0;
+      border: 1px solid #ccc;
+      border-radius: 4px;
       cursor: pointer;
-      user-select: none;
-      transition: all 0.2s;
-      border: none;
-      color: #333 !important;
     }
     
-    .variant-selector .variant-btn.active {
-      background: #4CAF50 !important; /* Force green when active */
-      color: white !important;
+    .variant-buttons button.active {
+      background: #4CAF50;
+      color: white;
+      border-color: #45a049;
     }
 
     .current-multiplier {
       margin-top: 10px;
       font-weight: bold;
+    }
+    
+    /* Color styling for variants and mutations in results */
+    .golden-text {
+      color: #ffd700;
+      font-weight: bold;
+    }
+    
+    .rainbow-text {
+      background: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      font-weight: bold;
+    }
+    
+    .shocked-text {
+      color: #ffff00;
+      text-shadow: 0 0 5px #ff6600;
+    }
+    
+    .frozen-text {
+      color: #a0e0ff;
+    }
+    
+    .wet-text, .chilled-text {
+      color: #66b3ff;
+    }
+    
+    .chocolate-text {
+      color: #8b4513;
+    }
+    
+    .moonlit-text {
+      color: #b0e0e6;
+      text-shadow: 0 0 3px #ffffff;
+    }
+    
     .stats th:nth-child(2), .stats td:nth-child(2) {
       text-align: right;
     }
     
-    /* NEW RESPONSIVE FIXES */
-    @media (max-width: 768px) {
-      .container {
-        flex-direction: column;
-        position: relative;
-      }
-      
-      .sidebar {
-        width: 100%;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-        padding: 15px;
-      }
-      
-      .sidebar button {
-        width: calc(50% - 4px);
-        margin: 2px 0;
-      }
-      
+    @media(max-width:768px) {
+      .container { flex-direction:column; }
+      .sidebar { width:100%; }
       .plant-panel {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        max-width: 100%;
-        transform: translateX(100%);
-        transition: transform 0.3s ease;
-        z-index: 100;
-        border-left: none;
-      }
-      
-      .plant-panel.active {
-        transform: translateX(0);
-      }
-      
-      .main {
-        padding: 20px;
-      }
-      
-      .calculator-panel,
-      .tips-grid,
-      .history,
-      .stats {
-        max-width: 100%;
+        position:relative;
+        left:0;
+        width:100%;
+        border:none;
       }
     }
   </style>
@@ -270,7 +266,6 @@
   <div class="container">
     <nav class="sidebar" id="sidebar">
       <h2>Categories</h2>
-      <!-- Existing sidebar content preserved -->
     </nav>
 
     <div id="panel" class="plant-panel">
@@ -286,10 +281,10 @@
         <div class="mutation-chips" id="mutation-chips"></div>
         
         <h4>Variants</h4>
-        <div class="variant-selector">
-          <button class="variant-btn active" data-mult="1">Normal</button>
-          <button class="variant-btn" data-mult="20">Golden</button>
-          <button class="variant-btn" data-mult="50">Rainbow</button>
+        <div class="variant-buttons">
+          <button class="active" data-mult="1">Normal</button>
+          <button data-mult="20">Golden</button>
+          <button data-mult="50">Rainbow</button>
         </div>
         
         <div class="current-multiplier">
@@ -360,29 +355,18 @@
 
       // Base prices for all crops
       const basePrices = {
-        // Public Crops
         "Carrot": 30, "Strawberry": 25, "Blueberry": 20, "Orange Tulip": 35, 
         "Tomato": 40, "Corn": 45, "Daffodil": 30, "Watermelon": 60, 
         "Pumpkin": 80, "Apple": 50, "Bamboo": 55, "Coconut": 65, 
         "Cactus": 70, "Dragon Fruit": 90, "Mango": 75, "Grape": 35, 
         "Mushroom": 45, "Pepper": 40, "Cacao": 85,
-        
-        // Normal Seed Pack
         "Lemon": 60, "Pineapple": 85, "Peach": 70, "Raspberry": 45, "Pear": 55,
-        
-        // Premium Seed Pack
         "Cranberry": 50, "Durian": 95, "Eggplant": 65, "Venus Flytrap": 110, 
         "Lotus": 120,
-        
-        // Exotic Seed Pack
         "Papaya": 100, "Banana": 75, "Passionfruit": 85, "Soul Fruit": 150, 
         "Cursed Fruit": 200,
-        
-        // Easter Event
         "Chocolate Carrot": 120, "Candy Sunflower": 130, "Easter Egg": 140, 
         "Red Lollipop": 125, "Candy Blossom": 150,
-        
-        // Lunar Glow Event
         "Nightshade": 160, "Glowshroom": 170, "Mint": 90, "Moonflower": 180, 
         "Starfruit": 190, "Moonglow": 200, "Moon Blossom": 250
       };
@@ -390,15 +374,8 @@
       // Store calculation history persistently
       const calculationHistory = JSON.parse(localStorage.getItem('gardenCalculations')) || [];
 
-      // Build sidebar buttons - preserving existing content
+      // Build sidebar buttons
       const sidebar = document.getElementById('sidebar');
-      const existingContent = sidebar.innerHTML;
-      sidebar.innerHTML = `
-        <h2>Categories</h2>
-        ${existingContent.includes('<button') ? existingContent : ''}
-      `;
-      
-      // Add category buttons after existing content
       for (let catName of Object.keys(categories)) {
         const btn = document.createElement('button');
         btn.textContent = catName;
@@ -441,28 +418,17 @@
         mutationChips.appendChild(chip);
       });
 
-       // Corrected Variant Button Initialization
-      const variantButtons = document.querySelectorAll('.variant-btn');
-      
-      // First remove active class from all
-      variantButtons.forEach(btn => btn.classList.remove('active'));
-      
-      // Then set Normal as active
-      const normalBtn = document.querySelector('.variant-btn[data-mult="1"]');
-      normalBtn.classList.add('active');
-      
-      // Click handler
+      // Variant buttons
+      const variantButtons = document.querySelectorAll('.variant-buttons button');
       variantButtons.forEach(btn => {
         btn.addEventListener('click', function() {
-          // Remove active from all
           variantButtons.forEach(b => b.classList.remove('active'));
-          // Add to clicked
           this.classList.add('active');
-          // Update multiplier
           variantMultiplier = parseInt(this.dataset.mult);
           updateMultiplier();
         });
       });
+
       // Update multiplier display
       function updateMultiplier() {
         const activeChips = document.querySelectorAll('.mutation-chip.active');
@@ -485,28 +451,10 @@
         if (calculationHistory.length === 0) {
           historyList.innerHTML = '<li>No calculations yet.</li>';
         } else {
-          historyList.innerHTML = calculationHistory.map(h => `<li>${h}</li>`).join('');
+          historyList.innerHTML = calculationHistory.map(h => `<li>${h.html}</li>`).join('');
         }
       }
-   function selectCategory(catName) {
-      // [Keep your existing category selection code]
-      
-      // Mobile handling
-      if (window.innerWidth <= 768) {
-        document.body.style.overflow = 'hidden'; // Prevent scrolling behind panel
-        document.getElementById('panel').style.transform = 'translateX(0)';
-      }
-    }
 
-    function hidePanel() {
-      // [Keep your existing hide code]
-      
-      // Mobile handling
-      if (window.innerWidth <= 768) {
-        document.body.style.overflow = '';
-        document.getElementById('panel').style.transform = 'translateX(100%)';
-      }
-    }
       // Category selection
       function selectCategory(catName) {
         document.querySelectorAll('#sidebar button')
@@ -516,11 +464,9 @@
           categories[catName].map(p => `<option>${p}</option>`).join('');
         document.getElementById('panel').classList.add('active');
         
-        // Only clear the current calculation, not history
         document.getElementById('calc-output').textContent = 'Your result will appear here.';
         document.getElementById('result').textContent = '';
         
-        // Keep displaying history
         updateHistoryDisplay();
       }
       window.selectCategory = selectCategory;
@@ -531,7 +477,7 @@
       }
       window.hidePanel = hidePanel;
 
-      // Calculation
+      // Calculation with simplified format: fruit variant mutation1 mutation2
       function calculate() {
         const plant = document.getElementById('plant-select').value;
         const mass = parseFloat(document.getElementById('mass').value);
@@ -543,11 +489,48 @@
         }
         
         const basePrice = basePrices[plant] || 100;
-        const price = mass * basePrice * mult;
+        const price = Math.floor(mass * basePrice * mult);
         
-        const entry = `${plant} (${mass.toFixed(2)}kg × ${mult.toFixed(2)}) → ₵${price.toFixed(2)}`;
-        document.getElementById('calc-output').textContent = entry;
-        document.getElementById('result').textContent = entry;
+        // Get active variant
+        const variantBtn = document.querySelector('.variant-buttons button.active');
+        const variant = variantBtn.textContent;
+        
+        // Get active mutations
+        const activeMutations = Array.from(document.querySelectorAll('.mutation-chip.active'))
+          .map(chip => chip.textContent);
+        
+        // Format the name with colors in simple format: fruit variant mutation1 mutation2
+        let formattedName = plant;
+        
+        // Add variant if not Normal
+        if (variant !== 'Normal') {
+          const variantClass = variant === 'Golden' ? 'golden-text' : 'rainbow-text';
+          formattedName += ` <span class="${variantClass}">${variant.toLowerCase()}</span>`;
+        }
+        
+        // Add mutations if any
+        if (activeMutations.length > 0) {
+          const formattedMutations = activeMutations.map(mut => {
+            let mutClass = '';
+            if (mut === 'Shocked') mutClass = 'shocked-text';
+            else if (mut === 'Frozen') mutClass = 'frozen-text';
+            else if (mut === 'Wet') mutClass = 'wet-text';
+            else if (mut === 'Chilled') mutClass = 'chilled-text';
+            else if (mut === 'Chocolate') mutClass = 'chocolate-text';
+            else if (mut === 'Moonlit') mutClass = 'moonlit-text';
+            return `<span class="${mutClass}">${mut.toLowerCase()}</span>`;
+          }).join(' ');
+          
+          formattedName += ` ${formattedMutations}`;
+        }
+        
+        const entry = {
+          raw: `${plant}${variant !== 'Normal' ? ' ' + variant.toLowerCase() : ''}${activeMutations.length > 0 ? ' ' + activeMutations.join(' ').toLowerCase() : ''} (${mass.toFixed(2)}kg × ${mult.toFixed(2)}) → ₵${price.toFixed(2)}`,
+          html: `${formattedName} (${mass.toFixed(2)}kg × ${mult.toFixed(2)}) → ₵${price.toFixed(2)}`
+        };
+        
+        document.getElementById('calc-output').innerHTML = entry.html;
+        document.getElementById('result').innerHTML = entry.html;
         
         // Add to history and save
         calculationHistory.unshift(entry);
