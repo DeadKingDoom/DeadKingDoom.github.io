@@ -74,63 +74,30 @@
   min-height: 48px; /* Match typical input height */
 }
 
-.chips {
+.chips-container {
   display: flex;
   flex-wrap: wrap;
   gap: 0.4rem;
-  align-items: center;
 }
 
 .chip {
   background-color: #e0e0e0;
-  padding: 0.25rem 0.6rem;  /* Smaller vertical padding */
+  padding: 0.25rem 0.6rem;
   border-radius: 999px;
-  font-size: 0.85rem;       /* Slightly smaller text */
+  font-size: 0.85rem;
   line-height: 1;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   cursor: pointer;
   font-weight: 500;
+  user-select: none;
+  transition: background-color 0.2s;
 }
 
-#mutation-search {
-  border: none;
-  outline: none;
-  flex: 1;
-  min-width: 100px;
-  padding: 0.3rem 0.5rem;
-  font-size: 1rem;
-  line-height: 1.2;
-  margin: 0;
+.chip-selected {
+  background-color: #007bff;
+  color: white;
 }
-
-.mutations-wrapper {
-  position: relative;
-}
-
-    .suggestions {
-      position: absolute;
-      top: 100%;
-      left: 0;
-      right: 0;
-      background: white;
-      border: 1px solid #ccc;
-      border-top: none;
-      z-index: 10;
-      max-height: 150px;
-      overflow-y: auto;
-      display: none;
-    }
-
-    .suggestions div {
-      padding: 0.5rem;
-      cursor: pointer;
-    }
-
-    .suggestions div:hover {
-      background-color: #f0f0f0;
-    }
-
     .variant-select {
       margin-top: 0.5rem;
     }
