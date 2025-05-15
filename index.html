@@ -27,11 +27,11 @@
 
     <div class="mutations-wrapper">
       <label for="mutation-search">Mutations</label>
-      <div id="mutation-container">
-        <div id="selected-mutations" class="chips"></div>
-        <input type="text" id="mutation-search" placeholder="Type to add a mutation..." autocomplete="off" />
-        <div id="mutation-suggestions" class="suggestions"></div>
+      <div class="mutations-wrapper">
+        <label for="mutations">Mutations</label>
+        <div id="mutation-chips" class="chips-container"></div>
       </div>
+
     </div>
 
     <label for="variant">Variant</label>
@@ -116,48 +116,28 @@
       ]
     };
 
-    const searchInput = document.getElementById("mutation-search");
-    const suggestionsEl = document.getElementById("mutation-suggestions");
-    const selectedEl = document.getElementById("selected-mutations");
-    let selectedMutations = [];
+    const mutationChipsContainer = document.getElementById("mutation-chips");
+let selectedMutations = new Set();
 
-    searchInput.addEventListener("input", () => {
-      const query = searchInput.value.toLowerCase().trim();
-      suggestionsEl.innerHTML = "";
-      if (!query) {
-        suggestionsEl.style.display = "none";
-        return;
+function renderMutationChips() {
+  mutationChipsContainer.innerHTML = "";
+  Object.entries(mutations).forEach(([name, value]) => {
+    const chip = document.createElement("div");
+    chip.className = "chip";
+    chip.textContent = `${name} (+${value})`;
+    chip.onclick = () => {
+      if (selectedMutations.has(name)) {
+        selectedMutations.delete(name);
+        chip.classList.remove("chip-selected");
+      } else {
+        selectedMutations.add(name);
+        chip.classList.add("chip-selected");
       }
-      const filtered = Object.keys(mutations).filter(
-        m => m.includes(query) && !selectedMutations.includes(m)
-      );
-      filtered.forEach(mutation => {
-        const div = document.createElement("div");
-        div.textContent = `${mutation} (+${mutations[mutation]})`;
-        div.onclick = () => {
-          selectedMutations.push(mutation);
-          renderChips();
-          suggestionsEl.style.display = "none";
-          searchInput.value = "";
-        };
-        suggestionsEl.appendChild(div);
-      });
-      suggestionsEl.style.display = filtered.length ? "block" : "none";
-    });
+    };
+    mutationChipsContainer.appendChild(chip);
+  });
+}
 
-    function renderChips() {
-      selectedEl.innerHTML = "";
-      selectedMutations.forEach(mutation => {
-        const chip = document.createElement("div");
-        chip.className = "chip";
-        chip.textContent = mutation;
-        chip.onclick = () => {
-          selectedMutations = selectedMutations.filter(m => m !== mutation);
-          renderChips();
-        };
-        selectedEl.appendChild(chip);
-      });
-    }
 
     function updatePlantOptions() {
       const category = document.getElementById("category").value;
@@ -183,14 +163,17 @@
       const plantData = plantOptions[category].find(p => p.name === plantName);
       const baseValue = plantData ? plantData.value : 1;
 
-      const mutationSum = selectedMutations.reduce((sum, mut) => sum + mutations[mut], 0);
+      const mutationSum = const mutationSum = Array.from(selectedMutations).reduce((sum, mut) => sum + mutations[mut], 0);
       const variant = parseFloat(document.getElementById("variant").value);
 
       const price = Math.floor((1 + mutationSum) * variant * mass * mass * baseValue);
       document.getElementById("result").textContent = `💰 Estimated Price for ${plantName}: ₵${price.toLocaleString()}`;
     }
 
-    window.onload = updatePlantOptions;
+    window.onload = () => {
+  updatePlantOptions();
+  renderMutationChips();
+};
   </script>
 </body>
 </html>
