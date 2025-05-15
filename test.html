@@ -152,6 +152,71 @@
       margin:0 10px;
     }
     footer a:hover { text-decoration:underline; }
+    
+   /* Mutation System - Corrected Styles */
+    .mutation-section {
+      margin: 20px 0;
+      padding: 15px;
+      background: #f5f5f5;
+      border-radius: 8px;
+    }
+
+    /* Mutation chips styling */
+    .mutation-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 10px 0;
+    }
+    
+    .mutation-chip {
+      padding: 6px 12px;
+      background: #e0e0e0;
+      border-radius: 20px;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.2s;
+      border: none;
+      color: #333;
+    }
+    
+    .mutation-chip.active {
+      background: #4CAF50;
+      color: white;
+    }
+
+    /* Variant buttons styling - properly isolated */
+    .variant-selector {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 10px 0;
+    }
+    
+    .variant-selector .variant-btn {
+      padding: 6px 12px;
+      background: #e0e0e0 !important; /* Force gray by default */
+      border-radius: 20px;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.2s;
+      border: none;
+      color: #333 !important;
+    }
+    
+    .variant-selector .variant-btn.active {
+      background: #4CAF50 !important; /* Force green when active */
+      color: white !important;
+    }
+
+    .current-multiplier {
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    .stats th:nth-child(2), .stats td:nth-child(2) {
+      text-align: right;
+    }
+    
     @media(max-width:768px) {
       .container { flex-direction:column; }
       .sidebar { width:100%; }
@@ -165,11 +230,10 @@
   </style>
 </head>
 <body>
-
   <div class="container">
     <nav class="sidebar" id="sidebar">
       <h2>Categories</h2>
-      <!-- Buttons injected here -->
+      <!-- Existing sidebar content preserved -->
     </nav>
 
     <div id="panel" class="plant-panel">
@@ -178,8 +242,25 @@
       <select id="plant-select"></select>
       <label>Mass (kg)</label>
       <input type="number" id="mass" step="0.01" placeholder="e.g. 24.02">
-      <label>Multiplier</label>
-      <input type="number" id="multiplier" value="2200">
+      
+      <!-- Mutation System -->
+      <div class="mutation-section">
+        <h4>Mutations</h4>
+        <div class="mutation-chips" id="mutation-chips"></div>
+        
+        <h4>Variants</h4>
+        <div class="variant-selector">
+          <button class="variant-btn active" data-mult="1">Normal</button>
+          <button class="variant-btn" data-mult="20">Golden</button>
+          <button class="variant-btn" data-mult="50">Rainbow</button>
+        </div>
+        
+        <div class="current-multiplier">
+          Active Multiplier: <span id="active-multiplier">1</span>
+        </div>
+      </div>
+      
+      <input type="hidden" id="multiplier" value="1">
       <button onclick="calculate()">Calculate</button>
       <div class="result" id="result"></div>
     </div>
@@ -213,7 +294,7 @@
       <section class="stats">
         <h2>Crop List Reference</h2>
         <table>
-          <thead><tr><th>Crop</th></tr></thead>
+          <thead><tr><th>Crop</th><th>Base Price</th></tr></thead>
           <tbody id="stats-body"></tbody>
         </table>
       </section>
@@ -240,8 +321,44 @@
         "Lunar Glow Event": ["Nightshade","Glowshroom","Mint","Moonflower","Starfruit","Moonglow","Moon Blossom"]
       };
 
-      // Build sidebar buttons
+      // Base prices for all crops
+      const basePrices = {
+        // Public Crops
+        "Carrot": 30, "Strawberry": 25, "Blueberry": 20, "Orange Tulip": 35, 
+        "Tomato": 40, "Corn": 45, "Daffodil": 30, "Watermelon": 60, 
+        "Pumpkin": 80, "Apple": 50, "Bamboo": 55, "Coconut": 65, 
+        "Cactus": 70, "Dragon Fruit": 90, "Mango": 75, "Grape": 35, 
+        "Mushroom": 45, "Pepper": 40, "Cacao": 85,
+        
+        // Normal Seed Pack
+        "Lemon": 60, "Pineapple": 85, "Peach": 70, "Raspberry": 45, "Pear": 55,
+        
+        // Premium Seed Pack
+        "Cranberry": 50, "Durian": 95, "Eggplant": 65, "Venus Flytrap": 110, 
+        "Lotus": 120,
+        
+        // Exotic Seed Pack
+        "Papaya": 100, "Banana": 75, "Passionfruit": 85, "Soul Fruit": 150, 
+        "Cursed Fruit": 200,
+        
+        // Easter Event
+        "Chocolate Carrot": 120, "Candy Sunflower": 130, "Easter Egg": 140, 
+        "Red Lollipop": 125, "Candy Blossom": 150,
+        
+        // Lunar Glow Event
+        "Nightshade": 160, "Glowshroom": 170, "Mint": 90, "Moonflower": 180, 
+        "Starfruit": 190, "Moonglow": 200, "Moon Blossom": 250
+      };
+
+      // Build sidebar buttons - preserving existing content
       const sidebar = document.getElementById('sidebar');
+      const existingContent = sidebar.innerHTML;
+      sidebar.innerHTML = `
+        <h2>Categories</h2>
+        ${existingContent.includes('<button') ? existingContent : ''}
+      `;
+      
+      // Add category buttons after existing content
       for (let catName of Object.keys(categories)) {
         const btn = document.createElement('button');
         btn.textContent = catName;
@@ -249,13 +366,79 @@
         sidebar.appendChild(btn);
       }
 
-      // Populate stats table
+      // Populate stats table with prices
       const statsBody = document.getElementById('stats-body');
       Object.values(categories).flat().forEach(crop => {
         const tr = document.createElement('tr');
-        tr.innerHTML = `<td>${crop}</td>`;
+        tr.innerHTML = `<td>${crop}</td><td>₵${basePrices[crop] || 'N/A'}</td>`;
         statsBody.appendChild(tr);
       });
+
+      // Mutation system - Fixed to properly calculate from 0
+      const mutations = [
+        { name: "Shocked", value: 99 },
+        { name: "Chilled", value: 1 },
+        { name: "Wet", value: 1 },
+        { name: "Moonlit", value: 1 },
+        { name: "Frozen", value: 9 },
+        { name: "Chocolate", value: 1 }
+      ];
+
+      let variantMultiplier = 1;
+      let baseMultiplier = 1; // Added base multiplier to fix the +1 issue
+
+      // Create mutation chips
+      const mutationChips = document.getElementById('mutation-chips');
+      mutations.forEach(mutation => {
+        const chip = document.createElement('div');
+        chip.className = 'mutation-chip';
+        chip.textContent = mutation.name;
+        chip.dataset.value = mutation.value;
+        chip.addEventListener('click', () => {
+          chip.classList.toggle('active');
+          updateMultiplier();
+        });
+        mutationChips.appendChild(chip);
+      });
+
+      // Corrected Variant Button Initialization
+      const variantButtons = document.querySelectorAll('.variant-btn');
+      
+      // First remove active class from all
+      variantButtons.forEach(btn => btn.classList.remove('active'));
+      
+      // Then set Normal as active
+      const normalBtn = document.querySelector('.variant-btn[data-mult="1"]');
+      normalBtn.classList.add('active');
+      
+      // Click handler
+      variantButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+          // Remove active from all
+          variantButtons.forEach(b => b.classList.remove('active'));
+          // Add to clicked
+          this.classList.add('active');
+          // Update multiplier
+          variantMultiplier = parseInt(this.dataset.mult);
+          updateMultiplier();
+        });
+      });
+      // Fixed multiplier calculation
+      function updateMultiplier() {
+        const activeChips = document.querySelectorAll('.mutation-chip.active');
+        let mutationSum = 0;
+        
+        activeChips.forEach(chip => {
+          mutationSum += parseInt(chip.dataset.value);
+        });
+        
+        // Calculate total multiplier properly
+        const totalMultiplier = baseMultiplier + mutationSum; // Start from base 1
+        const effectiveMultiplier = totalMultiplier * variantMultiplier;
+        
+        document.getElementById('active-multiplier').textContent = effectiveMultiplier;
+        document.getElementById('multiplier').value = effectiveMultiplier;
+      }
 
       // Category selection
       function selectCategory(catName) {
@@ -281,14 +464,18 @@
         const plant = document.getElementById('plant-select').value;
         const mass = parseFloat(document.getElementById('mass').value);
         const mult = parseFloat(document.getElementById('multiplier').value);
-        if (isNaN(mass) || isNaN(mult)) {
-          alert('Enter valid numbers');
+        
+        if (isNaN(mass)) {
+          alert('Please enter a valid mass');
           return;
         }
-        // TODO: replace this placeholder with your real formula
-        const price = Math.floor(mass * mult * 100);
-        const entry = `${plant} (${mass.toFixed(2)}kg x${mult}) → ₵${price.toLocaleString()}`;
+        
+        const basePrice = basePrices[plant] || 100;
+        const price = mass * basePrice * mult;
+        
+        const entry = `${plant} (${mass.toFixed(2)}kg × ${mult.toFixed(2)}) → ₵${price.toFixed(2)}`;
         document.getElementById('calc-output').textContent = entry;
+        
         history.unshift(entry);
         if (history.length > 5) history.pop();
         document.getElementById('history-list').innerHTML =
@@ -303,6 +490,9 @@
         document.getElementById('result').textContent = '';
       }
       window.hideCalcOutput = hideCalcOutput;
+
+      // Initialize multiplier display
+      updateMultiplier();
     });
   </script>
 </body>
