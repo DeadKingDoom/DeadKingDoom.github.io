@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
@@ -227,22 +228,27 @@
     .shocked-text {
       color: #ffff00;
       text-shadow: 0 0 5px #ff6600;
+      font-weight: bold;
     }
     
     .frozen-text {
       color: #a0e0ff;
+      font-weight: bold;
     }
     
     .wet-text, .chilled-text {
       color: #66b3ff;
+      font-weight: bold;
     }
     
     .chocolate-text {
       color: #8b4513;
+      font-weight: bold;
     }
     
     .moonlit-text {
-      color: #b0e0e6;
+      color: #9370db;
+      font-weight: bold;
       text-shadow: 0 0 3px #ffffff;
     }
     
@@ -477,7 +483,7 @@
       }
       window.hidePanel = hidePanel;
 
-      // Calculation with simplified format: fruit variant mutation1 mutation2
+      // Calculation with new format: variant mutations fruit
       function calculate() {
         const plant = document.getElementById('plant-select').value;
         const mass = parseFloat(document.getElementById('mass').value);
@@ -499,13 +505,13 @@
         const activeMutations = Array.from(document.querySelectorAll('.mutation-chip.active'))
           .map(chip => chip.textContent);
         
-        // Format the name with colors in simple format: fruit variant mutation1 mutation2
-        let formattedName = plant;
+        // Format the name with colors in format: variant mutations fruit
+        let formattedParts = [];
         
         // Add variant if not Normal
         if (variant !== 'Normal') {
           const variantClass = variant === 'Golden' ? 'golden-text' : 'rainbow-text';
-          formattedName += ` <span class="${variantClass}">${variant.toLowerCase()}</span>`;
+          formattedParts.push(`<span class="${variantClass}">${variant.toLowerCase()}</span>`);
         }
         
         // Add mutations if any
@@ -519,13 +525,17 @@
             else if (mut === 'Chocolate') mutClass = 'chocolate-text';
             else if (mut === 'Moonlit') mutClass = 'moonlit-text';
             return `<span class="${mutClass}">${mut.toLowerCase()}</span>`;
-          }).join(' ');
-          
-          formattedName += ` ${formattedMutations}`;
+          });
+          formattedParts = formattedParts.concat(formattedMutations);
         }
         
+        // Add fruit name at the end
+        formattedParts.push(plant.toLowerCase());
+        
+        const formattedName = formattedParts.join(' ');
+        
         const entry = {
-          raw: `${plant}${variant !== 'Normal' ? ' ' + variant.toLowerCase() : ''}${activeMutations.length > 0 ? ' ' + activeMutations.join(' ').toLowerCase() : ''} (${mass.toFixed(2)}kg × ${mult.toFixed(2)}) → ₵${price.toFixed(2)}`,
+          raw: `${variant !== 'Normal' ? variant.toLowerCase() + ' ' : ''}${activeMutations.length > 0 ? activeMutations.join(' ').toLowerCase() + ' ' : ''}${plant.toLowerCase()} (${mass.toFixed(2)}kg × ${mult.toFixed(2)}) → ₵${price.toFixed(2)}`,
           html: `${formattedName} (${mass.toFixed(2)}kg × ${mult.toFixed(2)}) → ₵${price.toFixed(2)}`
         };
         
