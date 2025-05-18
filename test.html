@@ -550,7 +550,7 @@
           "Carrot","Strawberry","Blueberry","Orange Tulip","Tomato",
           "Corn","Daffodil","Watermelon","Pumpkin","Apple",
           "Bamboo","Coconut","Cactus","Dragon Fruit","Mango",
-          "Grape","Mushroom","Pepper","Cacao"
+          "Grape","Mushroom","Pepper","Cacao","Beanstalk"
         ],
         "Normal Seed Pack": ["Lemon","Pineapple","Peach","Raspberry","Pear"],
         "Premium Seed Pack": ["Raspberry","Cranberry","Durian","Eggplant","Venus Flytrap","Lotus"],
@@ -561,20 +561,20 @@
 
       // Base prices for all crops
       const basePrices = {
-        "Carrot": 30, "Strawberry": 25, "Blueberry": 20, "Orange Tulip": 35, 
-        "Tomato": 40, "Corn": 45, "Daffodil": 30, "Watermelon": 60, 
-        "Pumpkin": 80, "Apple": 50, "Bamboo": 55, "Coconut": 65, 
-        "Cactus": 70, "Dragon Fruit": 90, "Mango": 75, "Grape": 35, 
-        "Mushroom": 45, "Pepper": 40, "Cacao": 85,
-        "Lemon": 60, "Pineapple": 85, "Peach": 70, "Raspberry": 45, "Pear": 55,
-        "Cranberry": 50, "Durian": 95, "Eggplant": 65, "Venus Flytrap": 110, 
+        "Carrot": 30, "Strawberry": 167, "Blueberry": 500, "Orange Tulip": 350000, 
+        "Tomato": 120, "Corn": 10, "Daffodil": 25000, "Watermelon": 60, 
+        "Pumpkin": 80, "Apple": 30.625, "Bamboo": 250, "Coconut": 65, 
+        "Cactus": 69.4, "Dragon Fruit": 33, "Mango": 28.875, "Grape": 872.25, 
+        "Mushroom": 241.5, "Pepper": 320, "Cacao": 171.875,"Beanstalk":200,
+        "Lemon": 60, "Pineapple": 222, "Peach": 70, "Raspberry": 178, "Pear": 55,
+        "Cranberry": 50, "Durian": 95, "Eggplant": 300, "Venus Flytrap": 110, 
         "Lotus": 120,
         "Papaya": 100, "Banana": 75, "Passionfruit": 85, "Soul Fruit": 150, 
         "Cursed Fruit": 200,
         "Chocolate Carrot": 120, "Candy Sunflower": 130, "Easter Egg": 140, 
-        "Red Lollipop": 125, "Candy Blossom": 150,
-        "Nightshade": 160, "Glowshroom": 170, "Mint": 90, "Moonflower": 180, 
-        "Starfruit": 190, "Moonglow": 200, "Moon Blossom": 250
+        "Red Lollipop": 125, "Candy Blossom": 11100,
+        "Nightshade": 160, "Glowshroom": 533, "Mint": 5250, "Moonflower": 2375, 
+        "Starfruit": 1666.25, "Moonglow": 408, "Moon Blossom": 250
       };
 
       // Store calculation history persistently
@@ -603,8 +603,12 @@
         { name: "Chilled", value: 1 },
         { name: "Wet", value: 1 },
         { name: "Moonlit", value: 1 },
+        { name: "Bloodlit", value: 3 },
         { name: "Frozen", value: 9 },
-        { name: "Chocolate", value: 1 }
+        { name: "Chocolate", value: 1 },
+        { name: "Celestial", value: 119 },
+        { name: "Zombified", value: 24 },
+        { name: "Disco", value: 124 }
       ];
 
       let variantMultiplier = 1;
