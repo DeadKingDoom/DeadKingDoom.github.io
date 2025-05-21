@@ -4,7 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
   <title>Grow a Garden Calculator</title>
-  <style>
+ <style>
     * {
       box-sizing: border-box;
     }
@@ -53,9 +53,10 @@
       z-index: 1001;
     }
     
-    .search-container {
-      padding: 15px;
-    }
+   .search-container {
+  padding: 1px;
+  margin-bottom: 5px;    /* ← add this */
+}
     
     .search-input {
       width: 100%;
@@ -780,7 +781,6 @@
 </head>
 <body>
   <div class="container">
-    <button class="sidebar-toggle" id="sidebarToggle">☰</button>
     <nav class="sidebar" id="sidebar">
       <div class="search-container">
         <input type="text" class="search-input" placeholder="🔍 Search crops..." id="sidebarSearch">
@@ -798,10 +798,6 @@
     <div id="panel" class="plant-panel">
       <button class="back-btn" onclick="hidePanel()">← Back</button>
       <h3 id="panel-title"></h3>
-      <div class="plant-search-container">
-        <input type="text" id="plantSearch" placeholder="Search plants..." class="search-input">
-        <button class="clear-search" onclick="clearPlantSearch()">×</button>
-      </div>
       <select id="plant-select"></select>
       <label>Mass (kg) <span class="tooltip" data-tooltip="0.01 - 9999 kg">❓</span></label>
       <input type="number" id="mass" step="0.01" min="0.01" max="9999" placeholder="e.g. 24.02" oninput="validateMass()">
@@ -934,20 +930,29 @@
       let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
       let sidebarCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
 
-      function createCategorySection(name, crops) {
-        const section = document.createElement('details');
-        section.className = 'category-section';
-        section.innerHTML = `
-          <summary>${name}</summary>
-          ${crops.map(crop => `
-            <button data-crop="${crop}" onclick="selectPlant('${name}', '${crop}')">
-              ${crop}
-              <span class="star-icon" onclick="toggleFavorite('${crop}', event); event.stopPropagation()">☆</span>
-            </button>
-          `).join('')}`
-        ;
-        return section;
-      }
+    function createCategorySection(name, crops) {
+  const section = document.createElement('details');
+  section.className = 'category-section';
+  section.innerHTML = `
+    <summary>${name}</summary>
+    ${crops.map(crop => {
+      // check if this crop is in favorites
+      const isFav = favorites.includes(crop);
+      return `
+        <button data-crop="${crop}" onclick="selectPlant('${name}', '${crop}')">
+          ${crop}
+          <span 
+            class="star-icon ${isFav ? 'active' : ''}" 
+            onclick="toggleFavorite('${crop}', event); event.stopPropagation()"
+          >
+            ${isFav ? '★' : '☆'}
+          </span>
+        </button>
+      `;
+    }).join('')}`;
+  return section;
+}
+
 
       const sidebar = document.getElementById('sidebar');
       Object.entries(categories).forEach(([name, crops]) => {
@@ -968,25 +973,15 @@
       }
 
       window.toggleFavorite = function(crop, event) {
-        event.stopPropagation();
-        favorites = favorites.includes(crop) ?
-          favorites.filter(f => f !== crop) :
-          [...favorites, crop];
-        
-        localStorage.setItem('favorites', JSON.stringify(favorites));
-        updateFavoritesDisplay();
-      }
+    event.stopPropagation();
+    favorites = favorites.includes(crop)
+      ? favorites.filter(f => f !== crop)
+      : [...favorites, crop];
+    localStorage.setItem('favorites', JSON.stringify(favorites));
+    updateFavoritesDisplay();
+    updateCategoryStars();    // ← SYNC ALL STARS IMMEDIATELY
+  }
 
-      document.getElementById('sidebarToggle').addEventListener('click', () => {
-        sidebarCollapsed = !sidebarCollapsed;
-        sidebar.classList.toggle('collapsed', sidebarCollapsed);
-        localStorage.setItem('sidebarCollapsed', sidebarCollapsed);
-        
-        // Hide the plant panel when the sidebar is collapsed
-        if (sidebarCollapsed) {
-          hidePanel();
-        }
-      });
 
       document.getElementById('sidebarSearch').addEventListener('input', (e) => {
         const query = e.target.value.toLowerCase();
@@ -1300,7 +1295,18 @@
           price: price,
           html: `${formattedName} (${mass.toFixed(2)}kg × ${mult.toFixed(2)}) → ₵${price.toFixed(2)}`
         };
-        
+            // … code that creates categories …
+    Object.entries(categories).forEach(([name, crops]) => {
+      sidebar.appendChild(createCategorySection(name, crops));
+    });
+    // ──────────────────────────────────────
+    
+
+    // … your existing calls to updateFavoritesDisplay(), updateMultiplier(), etc. …
+    updateFavoritesDisplay();
+    updateCategoryStars();    // ← ensure this runs on page load
+    sidebar.classList.toggle('collapsed', sidebarCollapsed);
+
         document.getElementById('calc-output').innerHTML = entry.html;
         document.getElementById('result').innerHTML = entry.html;
         document.getElementById('result').style.display = 'block';
@@ -1331,14 +1337,22 @@
         errorDisplay.style.display = 'none';
         return true;
       };
-
-      window.clearPlantSearch = function() {
-        document.getElementById('plantSearch').value = '';
-        Array.from(document.getElementById('plant-select').options).forEach(option => {
-          option.style.display = 'block';
-        });
-      };
-
+// Call this any time `favorites` changes
+function updateCategoryStars() {
+  document.querySelectorAll('.category-section button').forEach(btn => {
+    const crop = btn.getAttribute('data-crop');
+    const star = btn.querySelector('.star-icon');
+    if (!star) return;
+    
+    if (favorites.includes(crop)) {
+      star.classList.add('active');
+      star.textContent = '★';
+    } else {
+      star.classList.remove('active');
+      star.textContent = '☆';
+    }
+  });
+}
       window.clearHistory = function() {
         localStorage.removeItem('gardenCalculations');
         calculationHistory = [];
